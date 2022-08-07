@@ -31,7 +31,7 @@ function Transactions(): JSX.Element {
 
         if(!account.account) return;
         
-        getTransactions(account.account).then(transactionsInfo => {
+        getTransactions(account).then(transactionsInfo => {
             
             if(transactionsInfo.status === '0') return;
 

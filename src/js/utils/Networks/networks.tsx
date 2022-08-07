@@ -4,12 +4,24 @@ import celoNetwork from '../../assets/celo_network';
 import ethereumNetwork from '../../assets/ethereum_network';
 import optimismNetwork from '../../assets/optimism_network';
 import polygonNetwork from '../../assets/polygon_network';
-import { INetworksByName, IImagesByNetwork, INetworksByChainId, IRpcUrlsByNetwork } from '../../types/Networks/NetworksTypes';
+import { INetworksByName, IImagesByNetwork, INetworksByChainId, IRpcUrlsByNetwork, INetworksForSelector } from '../../types/Networks/NetworksTypes';
 
 
+
+export const NETWORKS_FOR_SELECTOR: INetworksForSelector = {
+    'Ethereum': 1,
+    'Celo': 42220,
+    'Polygon': 137,
+    'Optimism': 10,
+    'Arbitrum': 42161 
+}
 
 export const NETWORKS_BY_NAME: INetworksByName = {
-    'EthereumRopsten': 3,
+    'Rinkeby': 4,
+    'Goerli': 5,
+    'Kovan': 42,
+    'Ropsten': 3,
+    'Ethereum': 1,
     'Celo': 42220,
     'Polygon': 137,
     'Optimism': 10,
@@ -17,7 +29,11 @@ export const NETWORKS_BY_NAME: INetworksByName = {
 }
 
 export const NETWORKS_BY_CHAIN_ID: INetworksByChainId = {
-    3: 'EthereumRopsten',
+    4: 'Rinkeby',
+    5: 'Goerli',
+    42: 'Kovan',
+    1: 'Ethereum',
+    3: 'Ropsten',
     42220: 'Celo',
     137: 'Polygon',
     10: 'Optimism',
@@ -25,7 +41,11 @@ export const NETWORKS_BY_CHAIN_ID: INetworksByChainId = {
 }
 
 export const RPC_URLS_BY_NETWORK: IRpcUrlsByNetwork = {
-    'EthereumRopsten': 'https://ropsten.infura.io/v3/',
+    'Rinkeby': 'https://rinkeby.infura.io/v3/',
+    'Goerli': 'https://rpc.goerli.mudit.blog/',
+    'Kovan': 'https://kovan.poa.network',
+    'Ropsten': 'https://ropsten.infura.io/v3/',
+    'Ethereum': 'https://api.mycryptoapi.com/eth',
     'Celo': 'https://forno.celo.org',
     'Polygon': 'https://polygon-rpc.com/',
     'Optimism': 'https://mainnet.optimism.io',
@@ -33,7 +53,11 @@ export const RPC_URLS_BY_NETWORK: IRpcUrlsByNetwork = {
 }
 
 export const IMAGES_BY_NETWORK: IImagesByNetwork = {
-    'EthereumRopsten': ethereumNetwork,
+    'Rinkeby': ethereumNetwork,
+    'Goerli': ethereumNetwork,
+    'Kovan': ethereumNetwork,
+    'Ropsten': ethereumNetwork,
+    'Ethereum': ethereumNetwork,
     'Celo': celoNetwork,
     'Polygon': polygonNetwork,
     'Optimism': optimismNetwork,

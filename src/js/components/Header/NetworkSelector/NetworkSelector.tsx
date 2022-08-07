@@ -14,9 +14,9 @@ import {
 } from '@chakra-ui/react';
 import * as React from 'react';
 import useGlobalSettings from '../../../GlobalSettings/useGlobalSettings';
-import { IImagesByNetwork, INetworksByChainId, INetworksByName } from '../../../types/Networks/NetworksTypes';
+import { IImagesByNetwork, INetworksByChainId, INetworksForSelector } from '../../../types/Networks/NetworksTypes';
 import convertToHex from '../../../utils/Hooks/convertToHex';
-import { IMAGES_BY_NETWORK, NETWORKS_BY_CHAIN_ID, NETWORKS_BY_NAME } from '../../../utils/Networks/networks';
+import { IMAGES_BY_NETWORK, NETWORKS_BY_CHAIN_ID, NETWORKS_FOR_SELECTOR } from '../../../utils/Networks/networks';
 import useAccount from '../../AccountProvider/useAccount';
 import useMetamask from '../../ConnectMetamask/useMetamask';
 
@@ -62,12 +62,12 @@ function NetworkSelector(): JSX.Element {
                 {
                     account.account !== null && account.chainId !== null ? 
 
-                    Object.keys(NETWORKS_BY_NAME).map(element => (
+                    Object.keys(NETWORKS_FOR_SELECTOR).map(element => (
 
                         <MenuItem 
                             key = {element}
                             fontSize = {'sm'} 
-                            onClick = {() => changeChain(convertToHex( NETWORKS_BY_NAME[element as keyof INetworksByName] ))}
+                            onClick = {() => changeChain(convertToHex( NETWORKS_FOR_SELECTOR[element as keyof INetworksForSelector] ))}
                         >
                             <Flex direction = {'row'} boxSize = {'100%'} alignItems = {'center'} gap = {1}>
                                 <Text

@@ -12,6 +12,7 @@ import {
 } from '@chakra-ui/react';
 import * as React from 'react';
 import useGlobalSettings from '../../../GlobalSettings/useGlobalSettings';
+import { NETWORKS_BY_NAME } from '../../../utils/Networks/networks';
 import useAccount from '../../AccountProvider/useAccount';
 import ThemeSwitcher from '../ThemeSwitcher/ThemeSwitcher';
 
@@ -21,6 +22,24 @@ function DropdownMenu(): JSX.Element {
 
     const {hardware, isPhoneHardware, mainContent, setMainContent} = useGlobalSettings();
     const {account} = useAccount();
+
+
+    const isTransactionsDisabled: boolean = account.account 
+                                            ? 
+                                            (
+                                                (account.chainId === NETWORKS_BY_NAME['Ropsten'] || 
+                                                account.chainId === NETWORKS_BY_NAME['Goerli'] || 
+                                                account.chainId === NETWORKS_BY_NAME['Ethereum'] || 
+                                                account.chainId === NETWORKS_BY_NAME['Rinkeby'] || 
+                                                account.chainId === NETWORKS_BY_NAME['Kovan']) 
+                                                ? 
+                                                false
+                                                : 
+                                                true
+                                            ) 
+                                            :
+                                            true;
+
 
     return ( 
         <Box boxSize = {isPhoneHardware(hardware) ? '75px' : '50px'} borderWidth = {1} p = {1} borderRadius = {20}>
@@ -39,7 +58,7 @@ function DropdownMenu(): JSX.Element {
                         </Flex>
                     </MenuItem>
                     <MenuItem
-                        isDisabled = {account.account ? (account.chainId === 3 ? false: true) : true}
+                        isDisabled = {isTransactionsDisabled}
                         onClick = {() => setMainContent(mainContent === 'wallet' ? 'transactions' : 'wallet')}
                     >
                         <Text
