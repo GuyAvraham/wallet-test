@@ -1,9 +1,8 @@
-
 export interface IBalanceViewProps {
-    accountBalance: number
+  accountBalance: number;
 }
 
 export interface INewBlockInfo {
-    filterId: string | null
-    hashes: string[]
+  filterId: string | null;
+  hashes: string[];
 }
