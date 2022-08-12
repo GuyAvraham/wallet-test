@@ -3,7 +3,6 @@ import {
   Box,
   Button,
   Flex,
-  Image,
   Menu,
   MenuButton,
   MenuItem,
@@ -12,28 +11,26 @@ import {
 } from "@chakra-ui/react";
 import * as React from "react";
 import useGlobalSettings from "../../../GlobalSettings/useGlobalSettings";
-import { NETWORKS_BY_NAME } from "../../../utils/Networks/networks";
+import { isEthereumNetworkByChainId } from "../../../utils/Networks/networks";
 import useAccount from "../../AccountProvider/useAccount";
 import ThemeSwitcher from "../ThemeSwitcher/ThemeSwitcher";
 
 function DropdownMenu(): JSX.Element {
-  const { hardware, isPhoneHardware, mainContent, setMainContent } =
-    useGlobalSettings();
+  const { isPhoneHardware, mainContent, setMainContent } = useGlobalSettings();
   const { account } = useAccount();
 
+  const onClickSetMainContent = () =>
+    setMainContent(mainContent === "wallet" ? "transactions" : "wallet");
+
   const isTransactionsDisabled: boolean = account.account
-    ? account.chainId === NETWORKS_BY_NAME["Ropsten"] ||
-      account.chainId === NETWORKS_BY_NAME["Goerli"] ||
-      account.chainId === NETWORKS_BY_NAME["Ethereum"] ||
-      account.chainId === NETWORKS_BY_NAME["Rinkeby"] ||
-      account.chainId === NETWORKS_BY_NAME["Kovan"]
+    ? isEthereumNetworkByChainId(account.chainId)
       ? false
       : true
     : true;
 
   return (
     <Box
-      boxSize={isPhoneHardware(hardware) ? "75px" : "50px"}
+      boxSize={isPhoneHardware() ? "75px" : "50px"}
       borderWidth={1}
       p={1}
       borderRadius={20}
@@ -50,11 +47,7 @@ function DropdownMenu(): JSX.Element {
           </MenuItem>
           <MenuItem
             isDisabled={isTransactionsDisabled}
-            onClick={() =>
-              setMainContent(
-                mainContent === "wallet" ? "transactions" : "wallet"
-              )
-            }
+            onClick={onClickSetMainContent}
           >
             <Text pl={3} fontSize={"md"} fontWeight={"bold"}>
               {mainContent === "wallet" ? "Transactions" : "Wallet"}

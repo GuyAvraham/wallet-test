@@ -29,7 +29,7 @@ import useAccount from "../../AccountProvider/useAccount";
 import useMetamask from "../../ConnectMetamask/useMetamask";
 
 function NetworkSelector(): JSX.Element {
-  const { isPhoneHardware, hardware } = useGlobalSettings();
+  const { isPhoneHardware } = useGlobalSettings();
   const { account } = useAccount();
   const { changeChain } = useMetamask();
   const [isSmallNetworkIcon] = useMediaQuery("(max-width: 800px)");
@@ -39,9 +39,14 @@ function NetworkSelector(): JSX.Element {
       ? "Select Network"
       : NETWORKS_BY_CHAIN_ID[`${account.chainId}` as keyof INetworksByChainId];
 
+  const onClickChangeChain = (element: string) =>
+    changeChain(
+      convertToHex(NETWORKS_FOR_SELECTOR[element as keyof INetworksForSelector])
+    );
+
   return (
     <Box
-      h={isPhoneHardware(hardware) ? "75px" : "50px"}
+      h={isPhoneHardware() ? "75px" : "50px"}
       borderWidth={1}
       p={1}
       borderRadius={20}
@@ -57,9 +62,9 @@ function NetworkSelector(): JSX.Element {
               alignItems={"center"}
               gap={1}
             >
-              {isSmallNetworkIcon || isPhoneHardware(hardware) ? (
+              {isSmallNetworkIcon || isPhoneHardware() ? (
                 <Image
-                  boxSize={isPhoneHardware(hardware) ? "30px" : "20px"}
+                  boxSize={isPhoneHardware() ? "30px" : "20px"}
                   src={
                     IMAGES_BY_NETWORK[currentChain as keyof IImagesByNetwork]
                   }
@@ -69,7 +74,7 @@ function NetworkSelector(): JSX.Element {
                   <Text fontSize={"sm"}>{currentChain}</Text>
                   <Spacer />
                   <Image
-                    boxSize={isPhoneHardware(hardware) ? "30px" : "20px"}
+                    boxSize={isPhoneHardware() ? "30px" : "20px"}
                     src={
                       IMAGES_BY_NETWORK[currentChain as keyof IImagesByNetwork]
                     }
@@ -85,15 +90,7 @@ function NetworkSelector(): JSX.Element {
               <MenuItem
                 key={element}
                 fontSize={"sm"}
-                onClick={() =>
-                  changeChain(
-                    convertToHex(
-                      NETWORKS_FOR_SELECTOR[
-                        element as keyof INetworksForSelector
-                      ]
-                    )
-                  )
-                }
+                onClick={() => onClickChangeChain(element)}
               >
                 <Flex
                   direction={"row"}
@@ -106,7 +103,7 @@ function NetworkSelector(): JSX.Element {
                   </Text>
                   <Spacer />
                   <Image
-                    boxSize={isPhoneHardware(hardware) ? "30px" : "20px"}
+                    boxSize={isPhoneHardware() ? "30px" : "20px"}
                     src={IMAGES_BY_NETWORK[element as keyof IImagesByNetwork]}
                   />
                 </Flex>
@@ -125,7 +122,7 @@ function NetworkSelector(): JSX.Element {
               </Box>
               <Spacer />
               <Icon
-                boxSize={isPhoneHardware(hardware) ? "30px" : "20px"}
+                boxSize={isPhoneHardware() ? "30px" : "20px"}
                 alignSelf={"center"}
               />
             </Flex>

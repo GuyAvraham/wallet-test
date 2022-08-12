@@ -11,25 +11,27 @@ import {
   NETWORKS_BY_CHAIN_ID,
   RPC_URLS_BY_NETWORK,
 } from "../../utils/Networks/networks";
+import { DEFAULT_ACCOUNT_VALUE } from "../AccountProvider/AccountProvider";
 import useAccount from "../AccountProvider/useAccount";
 import useAlertDialogError from "../AlertDialogErrorProvider/useAlertDialogError";
 import useEthereumProvider from "../EthereumProvider/useEthereumProvider";
-
-const DEFAULT_ACCOUNT_VALUE: IAccount = {
-  account: null,
-  chainId: null,
-  balance: null,
-  icon: null,
-};
 
 const DEFAULT_ACCOUNT_CONTEXT_VALUE: IMetamaskProvider = {
   disconnectDapp: {
     current: null,
   },
-  onDisconnect: () => {},
-  changeChain: (chainId) => {},
-  updateAccountData: () => {},
-  connectMetamask: () => {},
+  onDisconnect: () => {
+    return;
+  },
+  changeChain: () => {
+    return;
+  },
+  updateAccountData: () => {
+    return;
+  },
+  connectMetamask: () => {
+    return;
+  },
 };
 
 export const MetamaskContext = React.createContext<IMetamaskProvider>(
@@ -55,6 +57,7 @@ export default function MetamaskProvider({ children }: IProviderProps) {
 
   const onDisconnect = (): void => {
     if (disconnectDapp.current !== null) disconnectDapp.current();
+
     forgetProvider();
     removeProvider();
     setMainContent("wallet");
@@ -62,6 +65,7 @@ export default function MetamaskProvider({ children }: IProviderProps) {
     setAccount(DEFAULT_ACCOUNT_VALUE);
   };
 
+  // eslint-disable-next-line no-unused-vars
   const connectMetamask = React.useCallback(
     async (callback: (isProviderDetected: boolean) => void) => {
       if (providerState) return;
@@ -76,13 +80,16 @@ export default function MetamaskProvider({ children }: IProviderProps) {
   const updateAccountData = (accountName: string) => {
     let acc: IAccount = { ...account, account: accountName };
 
-    providerState!
+    if (!providerState)
+      throw new Error("providerState equals to " + providerState);
+
+    providerState
       .request({ method: "eth_getBalance", params: [accountName, "latest"] })
       .then((result: string) => {
         const balance = parseEth(result);
         acc = { ...acc, balance };
 
-        providerState!
+        providerState
           .request({ method: "eth_chainId" })
           .then((result: string) => {
             const chainId = parseInt(result);
@@ -94,12 +101,10 @@ export default function MetamaskProvider({ children }: IProviderProps) {
   };
 
   const changeChain = async (chainId: string) => {
-    if (!providerState) {
-      console.log("providerState equals to " + providerState);
-      return false;
-    }
+    if (!providerState)
+      throw new Error("providerState equals to " + providerState);
 
-    await providerState!
+    await providerState
       .request({
         method: "wallet_switchEthereumChain",
         params: [{ chainId: chainId }],
@@ -116,7 +121,7 @@ export default function MetamaskProvider({ children }: IProviderProps) {
           const network =
             NETWORKS_BY_CHAIN_ID[integerChainId as keyof INetworksByChainId];
 
-          await providerState!
+          await providerState
             .request({
               method: "wallet_addEthereumChain",
               params: [
@@ -129,10 +134,11 @@ export default function MetamaskProvider({ children }: IProviderProps) {
                 },
               ],
             })
-            .then((result) => {
+            .then(() => {
               return true;
             })
             .catch((error) => {
+              console.log(error);
               return false;
             });
         }
@@ -144,6 +150,8 @@ export default function MetamaskProvider({ children }: IProviderProps) {
   };
 
   React.useEffect(() => {
+    if (!providerState) return;
+
     const setDataAccount = (accountName: string) => {
       saveProvider();
       setMainContent("wallet");
@@ -161,57 +169,72 @@ export default function MetamaskProvider({ children }: IProviderProps) {
     };
 
     const onConnect = async (): Promise<void> => {
-      const changedAccount: string[] = await providerState!.request({
+      if (!providerState)
+        throw new Error("providerState equals to " + providerState);
+
+      const changedAccount: string[] = await providerState.request({
         method: "eth_requestAccounts",
       });
       setDataAccount(changedAccount[0]);
     };
 
     const subscribeEvents = async (): Promise<void> => {
-      await providerState!.on("chainChanged", onConnect);
-      await providerState!.on("accountsChanged", onAccountChanged);
-      await providerState!.on("connect", onConnect);
-      await providerState!.on("disconnect", onDisconnect);
+      if (!providerState)
+        throw new Error("providerState equals to " + providerState);
+
+      await providerState.on("chainChanged", onConnect);
+      await providerState.on("accountsChanged", onAccountChanged);
+      await providerState.on("connect", onConnect);
+      await providerState.on("disconnect", onDisconnect);
     };
 
     const onProviderChanged = async () => {
-      if (providerState) {
-        await subscribeEvents();
+      if (!providerState)
+        throw new Error("providerState equals to " + providerState);
 
-        providerState
-          .request({ method: "eth_requestAccounts" })
-          .then((result) => {
-            if (result.length !== 0) setDataAccount(result[0]);
-          })
-          .then(() => {
-            connectWay.current = "metamask";
-          })
-          .catch((error) => {
-            if (error.code === 4001) {
-              onDisconnect();
-              alertDialogError(
-                "Error connecting",
-                "The connection attempt failed. Please try to connect in your wallet.",
-                "Try again"
-              );
-            }
-          });
-      }
+      await subscribeEvents();
+
+      providerState
+        .request({ method: "eth_requestAccounts" })
+        .then((result) => {
+          if (result.length !== 0) setDataAccount(result[0]);
+        })
+        .then(() => {
+          connectWay.current = "metamask";
+        })
+        .catch((error) => {
+          if (error.code === 4001) {
+            onDisconnect();
+            alertDialogError(
+              "Error connecting",
+              "The connection attempt failed. Please try to connect in your wallet.",
+              "Try again"
+            );
+          }
+        });
     };
 
     onProviderChanged();
   }, [providerState]);
 
+  const contextValue = React.useMemo(() => {
+    return {
+      disconnectDapp,
+      onDisconnect,
+      changeChain,
+      updateAccountData,
+      connectMetamask,
+    };
+  }, [
+    disconnectDapp,
+    onDisconnect,
+    changeChain,
+    updateAccountData,
+    connectMetamask,
+  ]);
+
   return (
-    <MetamaskContext.Provider
-      value={{
-        disconnectDapp,
-        onDisconnect,
-        changeChain,
-        updateAccountData,
-        connectMetamask,
-      }}
-    >
+    <MetamaskContext.Provider value={contextValue}>
       {children}
     </MetamaskContext.Provider>
   );

@@ -14,17 +14,30 @@ import ConnectWalletContent from "./ModalContents/ConnectWalletContent";
 
 function AccountMenu() {
   const { account } = useAccount();
-  const { hardware, isPhoneHardware } = useGlobalSettings();
+  const { isPhoneHardware } = useGlobalSettings();
   const [isAccountModalOpen, setIsAccountModalOpen] =
     React.useState<boolean>(false);
   const [isConnectModalOpen, setIsConnectModalOpen] =
     React.useState<boolean>(false);
 
+  const onCloseModal = () => {
+    setIsAccountModalOpen(false);
+    setIsConnectModalOpen(false);
+  };
+
+  const onAccountModalOpen = () => {
+    setIsAccountModalOpen(true);
+  };
+
+  const onConnectModalOpen = () => {
+    setIsConnectModalOpen(true);
+  };
+
   return (
     <>
       <Flex
         direction={"row"}
-        h={isPhoneHardware(hardware) ? "75px" : "50px"}
+        h={isPhoneHardware() ? "75px" : "50px"}
         borderWidth={1}
         alignItems={"center"}
         borderRadius={20}
@@ -33,20 +46,17 @@ function AccountMenu() {
       >
         {account.account ? (
           <>
-            <Tooltip label={account.balance!}>
+            <Tooltip
+              label={account.balance ? account.balance : "Connect in wallet"}
+            >
               <Text pl={2} fontSize={"sm"}>
                 {account.balance?.toFixed(2)} ETH
               </Text>
             </Tooltip>
-            <Button
-              h={"100%"}
-              onClick={() =>
-                setIsAccountModalOpen((previous) => (previous = true))
-              }
-            >
+            <Button h={"100%"} onClick={onAccountModalOpen}>
               <Text
                 noOfLines={1}
-                maxW={isPhoneHardware(hardware) ? "195px" : "130px"}
+                maxW={isPhoneHardware() ? "195px" : "130px"}
                 display={"block !important"}
                 fontSize={"sm"}
               >
@@ -56,11 +66,9 @@ function AccountMenu() {
           </>
         ) : (
           <Button
-            w={isPhoneHardware(hardware) ? "300px" : "200px"}
+            w={isPhoneHardware() ? "300px" : "200px"}
             h={"100%"}
-            onClick={() =>
-              setIsConnectModalOpen((previous) => (previous = true))
-            }
+            onClick={onConnectModalOpen}
             fontSize={"sm"}
           >
             Connect Wallet
@@ -73,11 +81,8 @@ function AccountMenu() {
             ? true
             : false
         }
-        onClose={() => {
-          setIsAccountModalOpen((previous) => (previous = false));
-          setIsConnectModalOpen((previous) => (previous = false));
-        }}
-        size={isPhoneHardware(hardware) ? "3xl" : "md"}
+        onClose={onCloseModal}
+        size={isPhoneHardware() ? "3xl" : "md"}
       >
         <ModalOverlay />
         {account.account ? (

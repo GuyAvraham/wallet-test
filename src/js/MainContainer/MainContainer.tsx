@@ -22,4 +22,4 @@ function MainContainer(): JSX.Element {
   );
 }
 
-export default React.memo(MainContainer);
+export default MainContainer;

@@ -6,8 +6,6 @@ import {
 import useAccount from "../../../AccountProvider/useAccount";
 import getExchange from "../getExchange";
 
-const UPDATE_EXCHANGE_TIME = 15000;
-
 function ExchangeUpdater({ setExchange }: IExchangeUpdaterProps): JSX.Element {
   const [updater, setUpdater] = React.useState<boolean>(false);
   const { account } = useAccount();
@@ -18,11 +16,11 @@ function ExchangeUpdater({ setExchange }: IExchangeUpdaterProps): JSX.Element {
     });
 
     if (account.balance)
-      setTimeout(() => setUpdater((previous) => (previous = !previous)), 15000);
+      setTimeout(() => setUpdater((previous) => !previous), 15000);
   }, [updater]);
 
   React.useEffect(() => {
-    setUpdater((previous) => (previous = !previous));
+    setUpdater((previous) => !previous);
   }, [account.balance]);
 
   return <></>;

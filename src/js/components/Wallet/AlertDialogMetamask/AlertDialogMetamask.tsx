@@ -18,26 +18,26 @@ function AlertDialogMetamask({
   isOpen,
   onClose,
 }: IAlertDialogMetamaskProps): JSX.Element {
-  const downloadRef = React.useRef<any>();
-  const { isPhoneHardware, hardware } = useGlobalSettings();
+  const downloadRef = React.useRef<HTMLButtonElement>(null);
+  const { isPhoneHardware } = useGlobalSettings();
 
   return (
     <AlertDialog
       isOpen={isOpen}
       leastDestructiveRef={downloadRef}
       onClose={onClose}
-      size={isPhoneHardware(hardware) ? "3xl" : "xl"}
+      size={isPhoneHardware() ? "3xl" : "xl"}
     >
       <AlertDialogOverlay />
       <AlertDialogContent
-        height={isPhoneHardware(hardware) ? "300px" : "200px"}
+        height={isPhoneHardware() ? "300px" : "200px"}
         bg={"alertDialogWindow"}
       >
         <AlertDialogHeader fontSize={"lg"}>
           Metamask is missing!
         </AlertDialogHeader>
         <AlertDialogBody fontSize={"md"}>
-          {isPhoneHardware(hardware) ? (
+          {isPhoneHardware() ? (
             <Text>
               Please, open your Metamask app and go to this site by browser in
               the app
@@ -54,7 +54,7 @@ function AlertDialogMetamask({
               ref={downloadRef}
               fontSize={"md"}
             >
-              {isPhoneHardware(hardware) ? (
+              {isPhoneHardware() ? (
                 <Text p={7}>Okey!</Text>
               ) : (
                 <LinkOverlay

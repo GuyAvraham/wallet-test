@@ -1,7 +1,6 @@
 import * as React from "react";
 import EthereumProvider from "../components/EthereumProvider/EthereumProvider";
 import AccountProvider from "../components/AccountProvider/AccountProvider";
-import useReloadElement from "../utils/Hooks/useReloadElement";
 import {
   ConnectWay,
   Hardware,
@@ -16,8 +15,6 @@ import {
   isPhoneHardware,
 } from "./Hardware/Hardware";
 import useMainContent from "./MainContentView/useMainContent";
-
-let hardware: Hardware;
 
 const DEFAULT_CONTEXT_VALUE: IGlobalSettingsProvider = {
   hardware: DEFAULT_HARDWARE_TYPE,
@@ -34,24 +31,22 @@ export default function GlobalSettingsProvider({
   children,
 }: IProviderProps): JSX.Element {
   const { mainContent, setMainContent } = useMainContent();
-  const { reloadElement } = useReloadElement();
   const connectWay = React.useRef<ConnectWay>("");
 
-  React.useEffect(() => {
-    hardware = detectHardware();
-    reloadElement();
-  }, []);
+  const hardware: Hardware = React.useMemo(() => detectHardware(), []);
+
+  const contextValue = React.useMemo(() => {
+    return {
+      hardware,
+      isPhoneHardware,
+      mainContent,
+      setMainContent,
+      connectWay,
+    };
+  }, [hardware, isPhoneHardware, mainContent, setMainContent, connectWay]);
 
   return (
-    <GlobalSettingsContext.Provider
-      value={{
-        hardware,
-        isPhoneHardware,
-        mainContent,
-        setMainContent,
-        connectWay,
-      }}
-    >
+    <GlobalSettingsContext.Provider value={contextValue}>
       <AlertDialogErrorProvider>
         <EthereumProvider>
           <AccountProvider>

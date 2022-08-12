@@ -14,19 +14,19 @@ import { IBalanceViewProps } from "../../../types/Wallet/Balance/Balance";
 import NewBlockEvent from "./NewBlockEvent/NewBlockEvent";
 
 function BalanceView({ accountBalance }: IBalanceViewProps): JSX.Element {
-  const { isPhoneHardware, hardware } = useGlobalSettings();
+  const { isPhoneHardware } = useGlobalSettings();
 
   return (
     <Flex direction={"row"}>
       <Image
         mb={12}
         alignSelf={"end"}
-        boxSize={isPhoneHardware(hardware) ? "140px" : "75px"}
+        boxSize={isPhoneHardware() ? "140px" : "75px"}
         src={ethImage}
       />
       <Flex direction={"column"}>
         <Spacer />
-        <Text fontSize={isPhoneHardware(hardware) ? 143 : 87} pb={6}>
+        <Text fontSize={isPhoneHardware() ? 143 : 87} pb={6}>
           ETH
         </Text>
       </Flex>
@@ -34,16 +34,13 @@ function BalanceView({ accountBalance }: IBalanceViewProps): JSX.Element {
       <Box>
         <Heading
           opacity={0.5}
-          size={isPhoneHardware(hardware) ? "4xl" : "2xl"}
+          size={isPhoneHardware() ? "4xl" : "2xl"}
           textAlign={"end"}
         >
           balance
         </Heading>
         <Tooltip label={accountBalance} placement={"left"}>
-          <Text
-            textAlign={"end"}
-            fontSize={isPhoneHardware(hardware) ? 300 : 175}
-          >
+          <Text textAlign={"end"} fontSize={isPhoneHardware() ? 300 : 175}>
             {accountBalance.toFixed(2)}
           </Text>
         </Tooltip>

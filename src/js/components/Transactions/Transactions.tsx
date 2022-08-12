@@ -27,8 +27,9 @@ function ethParse(value: number) {
 }
 
 function Transactions(): JSX.Element {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [transactions, setTransactions] = React.useState<any[] | null>(null);
-  const { hardware, isPhoneHardware } = useGlobalSettings();
+  const { isPhoneHardware } = useGlobalSettings();
   const { account } = useAccount();
 
   React.useEffect(() => {
@@ -60,10 +61,7 @@ function Transactions(): JSX.Element {
 
           <Tbody>
             {transactions.map((transaction) => (
-              <Tr
-                key={transaction.hash}
-                h={isPhoneHardware(hardware) ? 220 : 120}
-              >
+              <Tr key={transaction.hash} h={isPhoneHardware() ? 220 : 120}>
                 <Td>
                   <Tooltip label={transaction.hash} placement={"bottom-start"}>
                     <Text

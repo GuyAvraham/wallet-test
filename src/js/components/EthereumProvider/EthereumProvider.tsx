@@ -9,10 +9,16 @@ import { IProviderProps } from "../../types/Types";
 
 const DEFAULT_ETHEREUM_PROVIDER_VALUE: IEthereumProvider = {
   providerState: null,
-  removeProvider: () => {},
+  removeProvider: () => {
+    return;
+  },
   detectProvider: async () => false,
-  forgetProvider: () => {},
-  saveProvider: () => {},
+  forgetProvider: () => {
+    return;
+  },
+  saveProvider: () => {
+    return;
+  },
 };
 
 function forgetProvider() {
@@ -41,6 +47,7 @@ export default function EthereumProvider({ children }: IProviderProps) {
     }
 
     const provider: IProvider = ethereum as IProvider;
+
     setProviderState(provider);
     //provider === window.ethereum
     return true;
@@ -57,16 +64,24 @@ export default function EthereumProvider({ children }: IProviderProps) {
     }
   }, [detectProvider]);
 
+  const contextValue = React.useMemo(() => {
+    return {
+      providerState,
+      removeProvider,
+      detectProvider,
+      forgetProvider,
+      saveProvider,
+    };
+  }, [
+    providerState,
+    removeProvider,
+    detectProvider,
+    forgetProvider,
+    saveProvider,
+  ]);
+
   return (
-    <EthereumContext.Provider
-      value={{
-        providerState,
-        removeProvider,
-        detectProvider,
-        forgetProvider,
-        saveProvider,
-      }}
-    >
+    <EthereumContext.Provider value={contextValue}>
       {children}
     </EthereumContext.Provider>
   );

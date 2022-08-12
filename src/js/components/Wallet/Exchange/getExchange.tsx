@@ -1,4 +1,3 @@
-import * as React from "react";
 import { IExchange } from "../../../types/Wallet/Exchange/Exhcange";
 
 const EXCHANGE_DATA_URL =

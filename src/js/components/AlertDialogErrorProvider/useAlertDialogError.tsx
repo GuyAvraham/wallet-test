@@ -2,7 +2,12 @@ import * as React from "react";
 import { AlertDialogContext } from "./AlertDialogErrorProvider";
 
 export default function useAlertDialogError() {
-  const value = React.useContext(AlertDialogContext);
+  const alertDialogError = React.useContext(AlertDialogContext);
 
-  return value;
+  if (alertDialogError === undefined)
+    throw new Error(
+      "useAlertDialogError must be used within a AlertDialogErrorProvider"
+    );
+
+  return alertDialogError;
 }

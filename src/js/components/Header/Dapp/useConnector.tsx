@@ -12,6 +12,7 @@ type UseConnectorReturnValue = [
   connect: ConnectToDApp,
   disconnect: DisconnectDApp
 ];
+// eslint-disable-next-line no-unused-vars
 type ConnectToDApp = (
   uri: string,
   account: string,
@@ -27,6 +28,7 @@ export default function useConnector(): UseConnectorReturnValue {
   const { alertDialogError } = useAlertDialogError();
 
   React.useEffect(() => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     let connector: any = localStorage.getItem("walletconnect");
     if (connector) {
       connector = JSON.parse(connector);
@@ -80,7 +82,7 @@ export default function useConnector(): UseConnectorReturnValue {
     account: string,
     chainId: number
   ) => {
-    connector.on("session_request", async (error, payload) => {
+    connector.on("session_request", async (error) => {
       if (error) {
         throw error;
       }
@@ -108,7 +110,7 @@ export default function useConnector(): UseConnectorReturnValue {
       });
     });
 
-    connector.on("disconnect", (error, payload) => {
+    connector.on("disconnect", (error) => {
       if (error) {
         throw error;
       }
