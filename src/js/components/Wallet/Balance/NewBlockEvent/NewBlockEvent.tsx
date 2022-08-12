@@ -1,77 +1,74 @@
-import * as React from 'react';
-import { INewBlockInfo } from '../../../../types/Wallet/Balance/Balance';
-import useAccount from '../../../AccountProvider/useAccount';
-import useMetamask from '../../../ConnectMetamask/useMetamask';
-import useEthereumProvider from '../../../EthereumProvider/useEthereumProvider';
-
-
+import * as React from "react";
+import { INewBlockInfo } from "../../../../types/Wallet/Balance/Balance";
+import useAccount from "../../../AccountProvider/useAccount";
+import useMetamask from "../../../ConnectMetamask/useMetamask";
+import useEthereumProvider from "../../../EthereumProvider/useEthereumProvider";
 
 const DEFAULT_NEW_BLOCK_INFO_VALUE: INewBlockInfo = {
-    filterId: '',
-    hashes: []
-}
-
-
+  filterId: "",
+  hashes: [],
+};
 
 function NewBlockEvent(): JSX.Element {
+  const newBlockInfo = React.useRef<INewBlockInfo>(
+    DEFAULT_NEW_BLOCK_INFO_VALUE
+  );
+  const { providerState } = useEthereumProvider();
+  const { account } = useAccount();
+  const { updateAccountData } = useMetamask();
+  const [updater, setUpdater] = React.useState<boolean>(false);
 
-    const newBlockInfo = React.useRef<INewBlockInfo>(DEFAULT_NEW_BLOCK_INFO_VALUE);
-    const {providerState} = useEthereumProvider();
-    const {account} = useAccount();
-    const {updateAccountData} = useMetamask();
-    const [updater, setUpdater] = React.useState<boolean>(false);
+  const isBlockChanged = (hashes: string[]) => {
+    if (hashes.length > 0) {
+      // block has been changed
 
+      if (!account.account)
+        throw new Error("account.account equals to " + account.account);
 
-    const isBlockChanged = (hashes: string[]) => {
-
-        if(hashes.length > 0) { // block has been changed
-
-            if(!account.account) throw new Error('account.account equals to ' + account.account);
-            
-            updateAccountData(account.account);
-            newBlockInfo.current.hashes = hashes;
-            console.log('update');
-        }
+      updateAccountData(account.account);
+      newBlockInfo.current.hashes = hashes;
+      console.log("update");
     }
+  };
 
-    React.useEffect(() => {
+  React.useEffect(() => {
+    const filterId = newBlockInfo.current.filterId;
 
-        const filterId = newBlockInfo.current.filterId;
+    if (!filterId) return;
 
-        if(!filterId) return;
+    if (!providerState)
+      throw new Error("providerState equals to " + providerState);
 
-        if(!providerState) throw new Error('providerState equals to ' + providerState);
+    providerState
+      .request({ method: "eth_getFilterChanges", params: [filterId] })
+      .then((hashes) => {
+        isBlockChanged(hashes);
+      })
+      .catch((error) => console.log(error));
 
-        providerState.request({method: 'eth_getFilterChanges', params: [filterId]})
-        .then((hashes => {
-            
-            isBlockChanged(hashes);
-        }))
-        .catch(error => console.log(error));
+    if (account.account)
+      setTimeout(() => setUpdater((previous) => !previous), 500);
+  }, [updater]);
 
-        if(account.account) setTimeout(() => setUpdater(previous => !previous), 500);
-    }, [updater]);
+  React.useEffect(() => {
+    if (account.account === null) return;
 
-    React.useEffect(() => {
+    if (!providerState)
+      throw new Error("providerState equals to " + providerState);
 
-        if(account.account === null) return; 
+    providerState
+      .request({ method: "eth_newBlockFilter" })
+      .then((filterId: string) => {
+        newBlockInfo.current.filterId = filterId;
 
-        if(!providerState) throw new Error('providerState equals to ' + providerState);
-        
-        providerState.request({method: 'eth_newBlockFilter'})
-        .then((filterId: string) => {
+        setUpdater((previous) => !previous);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, [account.account]);
 
-            newBlockInfo.current.filterId = filterId;
-            
-            setUpdater(previous => !previous);
-        })
-        .catch(error => {console.log(error)});
-    }, [account.account]);
-
-    
-    return <></>;
+  return <></>;
 }
-
-
 
 export default React.memo(NewBlockEvent);

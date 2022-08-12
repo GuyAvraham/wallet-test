@@ -1,27 +1,25 @@
-import * as React from 'react';
-
-
+import * as React from "react";
 
 export interface IGlobalSettingsProvider extends IUseMainContent {
-    hardware: Hardware
-    isPhoneHardware: () => boolean
-    connectWay: React.MutableRefObject<ConnectWay>
+  hardware: Hardware;
+  isPhoneHardware: () => boolean;
+  connectWay: React.MutableRefObject<ConnectWay>;
 }
 
 export interface IUseMainContent {
-    setMainContent: React.Dispatch<React.SetStateAction<MainContent>>
-    mainContent: MainContent
+  setMainContent: React.Dispatch<React.SetStateAction<MainContent>>;
+  mainContent: MainContent;
 }
 
-export type IProviderProps = IHasChildrenProps
+export type IProviderProps = IHasChildrenProps;
 
 export interface IHasChildrenProps {
-    children: React.ReactNode
+  children: React.ReactNode;
 }
 
-export type Hardware = HardwarePhone | 'windows' | 'mac';
-export type HardwarePhone = 'iphone' | 'android';
+export type Hardware = HardwarePhone | "windows" | "mac";
+export type HardwarePhone = "iphone" | "android";
 
-export type MainContent = 'transactions' | 'wallet';
+export type MainContent = "transactions" | "wallet";
 
-export type ConnectWay = 'metamask' | 'walletconnect' | '';
+export type ConnectWay = "metamask" | "walletconnect" | "";
