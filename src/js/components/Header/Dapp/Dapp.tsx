@@ -36,20 +36,20 @@ function Dapp() {
 
     const [connector, connect, disconnect] = useConnector();
     const uri = React.useRef<string>('');
-    const inputRef = React.useRef<any>();
+    const inputRef = React.useRef<HTMLInputElement>(null);
     const {account} = useAccount();
     const {disconnectDapp} = useMetamask();
-    const {isPhoneHardware, hardware} = useGlobalSettings();
+    const {isPhoneHardware} = useGlobalSettings();
 
 
     const textStyle = {
-        fontSize: isPhoneHardware(hardware) ? '30px' : '20px'
+        fontSize: isPhoneHardware() ? '30px' : '20px'
     }
 
     const buttonStyle = {
         color: 'defaultReverse',
         variant: 'solid',
-        height: isPhoneHardware(hardware) ? '70px' : '47px'
+        height: isPhoneHardware() ? '70px' : '47px'
     }
 
 
@@ -65,7 +65,7 @@ function Dapp() {
                 <AccordionButton>
                     <Text sx = {textStyle}>Connected dApp</Text>
                     <Spacer/>
-                    <AccordionIcon boxSize={isPhoneHardware(hardware) ? '37.5px' : '25px'}/>
+                    <AccordionIcon boxSize={isPhoneHardware() ? '37.5px' : '25px'}/>
                 </AccordionButton>
 
                 <AccordionPanel p = {0}>
@@ -76,7 +76,7 @@ function Dapp() {
                         <Flex sx = {dAppWindowStyle}>
                             <Flex direction = {'row'} gap = {2}>
                                 <Image 
-                                    boxSize={isPhoneHardware(hardware) ? '75px' : '50px'}
+                                    boxSize={isPhoneHardware() ? '75px' : '50px'}
                                     src = {connector.peerMeta?.icons[0]}
                                 />
                                 <Link sx = {textStyle} isExternal alignSelf = {'center'} href = {connector.peerMeta?.url}>{connector.peerMeta?.name}</Link>
@@ -97,16 +97,17 @@ function Dapp() {
                                 placeholder = 'WalletConnect URI'
                                 sx = {textStyle}
                                 ref = {inputRef}
-                                height = {isPhoneHardware(hardware) ? '80px' : '53px'}
+                                height = {isPhoneHardware() ? '80px' : '53px'}
                             />
                             <Flex>
                                 <Spacer/>
                                 <Button
                                     bg = {'positiveButton'}
                                     onClick = {() => {
-
-                                        connect(uri.current, account.account!, account.chainId!)
-                                        inputRef.current.value = '';
+                                        if(account.account === null || account.chainId === null) throw new Error('account.account, account.chainId are equal to ' + account.account + account.chainId);
+                                        
+                                        connect(uri.current, account.account, account.chainId)
+                                        if(inputRef.current) inputRef.current.value = '';
                                     }}
                                     sx = {{...textStyle, ...buttonStyle}}
                                 >
@@ -119,7 +120,7 @@ function Dapp() {
                     <Flex minHeight = {'100px'} direction = {'row'} width = {'100%'} gap = {2} px = {5}>
                         <Box sx = {textStyle} alignSelf = {'center'}>Please, connect in your wallet</Box>
                         <Spacer/>
-                        <Icon boxSize = {isPhoneHardware(hardware) ? '30px' : '20px'} alignSelf={'center'}/>
+                        <Icon boxSize = {isPhoneHardware() ? '30px' : '20px'} alignSelf={'center'}/>
                     </Flex>
                 }
                     

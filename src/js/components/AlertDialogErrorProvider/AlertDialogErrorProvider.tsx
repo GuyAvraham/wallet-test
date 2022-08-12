@@ -15,7 +15,7 @@ import { IAlertDialogErrorProvider } from '../../types/AlertDialogProvider/Alert
 
 
 const DEFAULT_ALERT_DIALOG_CONTEXT_VALUE: IAlertDialogErrorProvider = {
-    alertDialogError: (header: string, alertMessage: string, buttonMessage: string) => {}
+    alertDialogError: () => { return; }
 }
 
 export const AlertDialogContext = React.createContext<IAlertDialogErrorProvider>(DEFAULT_ALERT_DIALOG_CONTEXT_VALUE);
@@ -25,11 +25,11 @@ export const AlertDialogContext = React.createContext<IAlertDialogErrorProvider>
 function AlertDialogError({children}: IProviderProps): JSX.Element {
 
     const [isOpen, setIsOpen] = React.useState<boolean>(false);
-    const closeButtonRef = React.useRef<any>();
+    const closeButtonRef = React.useRef<HTMLButtonElement>(null);
     const headerRef = React.useRef<string>('');
     const alertMessageRef = React.useRef<string>('');
     const buttonMessageRef = React.useRef<string>('');
-    const {isPhoneHardware, hardware} = useGlobalSettings();
+    const {isPhoneHardware} = useGlobalSettings();
 
 
     const alertDialogError = (header: string, alertMessage: string, buttonMessage: string) => {
@@ -40,15 +40,17 @@ function AlertDialogError({children}: IProviderProps): JSX.Element {
         setIsOpen(true);
     }
 
+    const onCloseAlertDialog = () => setIsOpen(false); 
+
 
     return (
         <AlertDialogContext.Provider value = {{alertDialogError}}>
             {children}
             <AlertDialog 
                 isOpen = {isOpen} 
-                onClose = {() => setIsOpen(false)} 
-                leastDestructiveRef = {closeButtonRef.current}
-                size = {isPhoneHardware(hardware) ? '3xl' : 'xl'}
+                onClose = {onCloseAlertDialog} 
+                leastDestructiveRef = {closeButtonRef}
+                size = {isPhoneHardware() ? '3xl' : 'xl'}
             >
                 <AlertDialogOverlay/>
                 <AlertDialogContent>
@@ -62,10 +64,10 @@ function AlertDialogError({children}: IProviderProps): JSX.Element {
 
                     <AlertDialogFooter justifyContent={'center'}>
                         <Button
-                            ref = {closeButtonRef.current}
+                            ref = {closeButtonRef}
                             colorScheme = {'red'}
                             fontSize = {'md'}
-                            onClick = {() => setIsOpen(false)}
+                            onClick = {onCloseAlertDialog}
                             width = {'100%'}
                         >
                             {buttonMessageRef.current}

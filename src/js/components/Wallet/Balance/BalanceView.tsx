@@ -17,16 +17,16 @@ import NewBlockEvent from './NewBlockEvent/NewBlockEvent';
 
 function BalanceView({accountBalance}: IBalanceViewProps): JSX.Element {
 
-    const {isPhoneHardware, hardware} = useGlobalSettings();
+    const {isPhoneHardware} = useGlobalSettings();
     
 
     return (
         <Flex direction = {'row'}>
-            <Image mb = {12} alignSelf = {'end'} boxSize = {isPhoneHardware(hardware) ? '140px' : '75px'} src = {ethImage} />
+            <Image mb = {12} alignSelf = {'end'} boxSize = {isPhoneHardware() ? '140px' : '75px'} src = {ethImage} />
             <Flex direction = {'column'}>
                 <Spacer/>
                 <Text 
-                    fontSize = {isPhoneHardware(hardware) ? 143 : 87}
+                    fontSize = {isPhoneHardware() ? 143 : 87}
                     pb = {6}
                 >
                     ETH
@@ -34,9 +34,9 @@ function BalanceView({accountBalance}: IBalanceViewProps): JSX.Element {
             </Flex>
             <Spacer/>
             <Box>
-                <Heading opacity = {0.5} size = {isPhoneHardware(hardware) ? '4xl' : '2xl'} textAlign = {'end'}>balance</Heading>
+                <Heading opacity = {0.5} size = {isPhoneHardware() ? '4xl' : '2xl'} textAlign = {'end'}>balance</Heading>
                 <Tooltip label = {accountBalance} placement = {'left'}>
-                    <Text textAlign={'end'} fontSize = {isPhoneHardware(hardware) ? 300 : 175}>
+                    <Text textAlign={'end'} fontSize = {isPhoneHardware() ? 300 : 175}>
                         {accountBalance.toFixed(2)}
                     </Text>
                 </Tooltip>

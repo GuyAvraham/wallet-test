@@ -1,3 +1,4 @@
+import { isMobile } from "react-device-detect";
 import { Hardware } from "../../types/Types";
 
 export const DEFAULT_HARDWARE_TYPE = 'windows';
@@ -5,9 +6,9 @@ export const HARDWARE_TYPES: Hardware[] = ['iphone', 'android', 'windows', 'mac'
 
 
 
-export function isPhoneHardware(hardware: Hardware): boolean {
+export function isPhoneHardware(): boolean {
     
-    return (hardware === 'android' || hardware === 'iphone');
+    return isMobile;
 }
 
 export function detectHardware(): Hardware {

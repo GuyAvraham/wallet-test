@@ -5,7 +5,9 @@ import { MetamaskContext } from './MetamaskProvider';
 
 export default function useMetamask() {
 
-    const contextValue = React.useContext(MetamaskContext)
+    const metamask = React.useContext(MetamaskContext)
+
+    if(metamask === undefined) throw new Error('useMetamask must be used within a MetamaskProvider');
     
-    return contextValue;
+    return metamask;
 }

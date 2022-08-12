@@ -1,4 +1,3 @@
-import * as React from 'react';
 import { IAccount } from '../../types/Account/Account';
 import { NETWORKS_BY_NAME } from '../../utils/Networks/networks';
 

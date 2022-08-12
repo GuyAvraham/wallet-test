@@ -24,7 +24,7 @@ import useMetamask from '../../ConnectMetamask/useMetamask';
 
 function NetworkSelector(): JSX.Element {
 
-    const {isPhoneHardware, hardware} = useGlobalSettings();
+    const {isPhoneHardware} = useGlobalSettings();
     const {account} = useAccount();
     const {changeChain} = useMetamask();
     const [isSmallNetworkIcon] = useMediaQuery('(max-width: 800px)');
@@ -32,9 +32,11 @@ function NetworkSelector(): JSX.Element {
 
     const currentChain = (account.account === null || account.chainId == null) ? 'Select Network' : NETWORKS_BY_CHAIN_ID[`${account.chainId}` as keyof INetworksByChainId];
 
+    const onClickChangeChain = (element: string) => changeChain(convertToHex( NETWORKS_FOR_SELECTOR[element as keyof INetworksForSelector] ))
+
 
     return (
-        <Box h = {isPhoneHardware(hardware) ? '75px' : '50px'} borderWidth = {1} p = {1} borderRadius = {20}>
+        <Box h = {isPhoneHardware() ? '75px' : '50px'} borderWidth = {1} p = {1} borderRadius = {20}>
             <Menu>
                 <MenuButton 
                     boxSize={'100%'}
@@ -46,13 +48,13 @@ function NetworkSelector(): JSX.Element {
                         :
                         <Flex direction = {'row'} boxSize = {'100%'} alignItems = {'center'} gap = {1}>
                             {
-                                isSmallNetworkIcon || isPhoneHardware(hardware) ? 
-                                <Image boxSize = {isPhoneHardware(hardware) ? '30px' : '20px'} src = {IMAGES_BY_NETWORK[currentChain as keyof IImagesByNetwork]}/>
+                                isSmallNetworkIcon || isPhoneHardware() ? 
+                                <Image boxSize = {isPhoneHardware() ? '30px' : '20px'} src = {IMAGES_BY_NETWORK[currentChain as keyof IImagesByNetwork]}/>
                                 :
                                 <>
                                     <Text fontSize = {'sm'}>{currentChain}</Text>
                                     <Spacer/>
-                                    <Image boxSize = {isPhoneHardware(hardware) ? '30px' : '20px'} src = {IMAGES_BY_NETWORK[currentChain as keyof IImagesByNetwork]}/>
+                                    <Image boxSize = {isPhoneHardware() ? '30px' : '20px'} src = {IMAGES_BY_NETWORK[currentChain as keyof IImagesByNetwork]}/>
                                 </>
                             }   
                         </Flex>
@@ -67,7 +69,7 @@ function NetworkSelector(): JSX.Element {
                         <MenuItem 
                             key = {element}
                             fontSize = {'sm'} 
-                            onClick = {() => changeChain(convertToHex( NETWORKS_FOR_SELECTOR[element as keyof INetworksForSelector] ))}
+                            onClick = {() => onClickChangeChain(element)}
                         >
                             <Flex direction = {'row'} boxSize = {'100%'} alignItems = {'center'} gap = {1}>
                                 <Text
@@ -77,7 +79,7 @@ function NetworkSelector(): JSX.Element {
                                     {element}
                                 </Text>
                                 <Spacer/>
-                                <Image boxSize = {isPhoneHardware(hardware) ? '30px' : '20px'} src = {IMAGES_BY_NETWORK[element as keyof IImagesByNetwork]}/>
+                                <Image boxSize = {isPhoneHardware() ? '30px' : '20px'} src = {IMAGES_BY_NETWORK[element as keyof IImagesByNetwork]}/>
                             </Flex>
                             
                         </MenuItem>
@@ -86,7 +88,7 @@ function NetworkSelector(): JSX.Element {
                     <Flex minHeight = {'100px'} direction = {'row'} width = {'100%'} gap = {2} px = {5}>
                         <Box fontSize = {'sm'} alignSelf = {'center'}>Please, connect in your wallet</Box>
                         <Spacer/>
-                        <Icon boxSize = {isPhoneHardware(hardware) ? '30px' : '20px'} alignSelf={'center'}/>
+                        <Icon boxSize = {isPhoneHardware() ? '30px' : '20px'} alignSelf={'center'}/>
                     </Flex>
                 }
                 </MenuList>

@@ -5,7 +5,7 @@ import {
  } from '../../types/Types';
 
 
-const DEFAULT_ACCOUNT_VALUE: IAccount = {
+export const DEFAULT_ACCOUNT_VALUE: IAccount = {
     account: null,
     chainId: null,
     balance: null,
@@ -14,7 +14,7 @@ const DEFAULT_ACCOUNT_VALUE: IAccount = {
 
 const DEFAULT_ACCOUNT_CONTEXT_VALUE: IAccountProvider = {
     account: DEFAULT_ACCOUNT_VALUE,
-    setAccount: () => {}
+    setAccount: () => { return; }
 }
 
 
@@ -27,9 +27,17 @@ export default function AccountProvider({children}: IProviderProps) {
 
     const [account, setAccount] = React.useState<IAccount>(DEFAULT_ACCOUNT_VALUE);
     
+    const contextValue = React.useMemo(() => {
+
+        return {
+            account,
+            setAccount
+        }
+    }, [account, setAccount]);
+
 
     return (
-        <AccountContext.Provider value = {{account, setAccount}}>
+        <AccountContext.Provider value = {contextValue}>
             {children}
         </AccountContext.Provider>
     );

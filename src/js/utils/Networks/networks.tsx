@@ -1,4 +1,3 @@
-import * as React from 'react';
 import arbitrumNetwork from '../../assets/arbitrum_network';
 import celoNetwork from '../../assets/celo_network';
 import ethereumNetwork from '../../assets/ethereum_network';
@@ -7,6 +6,17 @@ import polygonNetwork from '../../assets/polygon_network';
 import { INetworksByName, IImagesByNetwork, INetworksByChainId, IRpcUrlsByNetwork, INetworksForSelector } from '../../types/Networks/NetworksTypes';
 
 
+
+export function isEthereumNetworkByChainId(chainId: number | null): boolean {
+
+    return (
+        chainId === NETWORKS_BY_NAME['Ropsten'] || 
+        chainId === NETWORKS_BY_NAME['Goerli'] || 
+        chainId === NETWORKS_BY_NAME['Ethereum'] || 
+        chainId === NETWORKS_BY_NAME['Rinkeby'] || 
+        chainId === NETWORKS_BY_NAME['Kovan']
+    );
+}
 
 export const NETWORKS_FOR_SELECTOR: INetworksForSelector = {
     'Ethereum': 1,

@@ -23,13 +23,24 @@ function AccountContent({setIsAccountModalOpen, setIsConnectModalOpen}: IAccount
     
     const {account} = useAccount();
     const {onDisconnect} = useMetamask();
-    const {hasCopied, onCopy} = useClipboard(account.account!);
-    const {hardware, isPhoneHardware} = useGlobalSettings();
+    const {hasCopied, onCopy} = useClipboard(account.account ? account.account : '');
+    const {isPhoneHardware} = useGlobalSettings();
 
 
     const smallButtonStyle = {
-        fontSize: isPhoneHardware(hardware) ? '27px': '13px',
+        fontSize: isPhoneHardware() ? '27px': '13px',
         borderWidth: 1
+    }
+
+    const onClickDisconnect = () => {
+
+        onDisconnect(); 
+        setIsAccountModalOpen(false);
+    }
+
+    const onClickChange = () => {
+        setIsAccountModalOpen(false); 
+        setIsConnectModalOpen(true)
     }
     
 
@@ -44,7 +55,7 @@ function AccountContent({setIsAccountModalOpen, setIsConnectModalOpen}: IAccount
                     px = {2}
                     borderWidth = {1}
                     borderRadius = {20}
-                    h = {isPhoneHardware(hardware) ? '225px': '150px'}
+                    h = {isPhoneHardware() ? '225px': '150px'}
                     direction = {'column'}
                     gap = {0}
                 >
@@ -57,18 +68,18 @@ function AccountContent({setIsAccountModalOpen, setIsConnectModalOpen}: IAccount
                         <Text opacity={0.5} fontSize = {'sm'}>Connected with Metamask</Text>
                         <Spacer/>
                         <Button
-                            size = {isPhoneHardware(hardware) ? 'lg': 'xs'}
+                            size = {isPhoneHardware() ? 'lg': 'xs'}
                             borderColor={'red'}
                             sx = {smallButtonStyle}
-                            onClick = {() => {onDisconnect(); setIsAccountModalOpen(previous => previous = false);}}
+                            onClick = {onClickDisconnect}
                         >
                             Disconnect
                         </Button>
                         <Button
-                            size = {isPhoneHardware(hardware) ? 'lg': 'xs'}
+                            size = {isPhoneHardware() ? 'lg': 'xs'}
                             sx = {smallButtonStyle}
                             borderColor={'blue'}
-                            onClick = {() => {setIsAccountModalOpen(previous => previous = false); setIsConnectModalOpen(previous => previous = true)}}
+                            onClick = {onClickChange}
                         >
                             Change
                         </Button>
@@ -79,7 +90,7 @@ function AccountContent({setIsAccountModalOpen, setIsConnectModalOpen}: IAccount
                         gap = {4}
                         flex = {1}
                     >
-                        <CheckCircleIcon color={'green'} boxSize={isPhoneHardware(hardware) ? '30px' : '20px'}/>
+                        <CheckCircleIcon color={'green'} boxSize={isPhoneHardware() ? '30px' : '20px'}/>
                         <Text  
                             noOfLines={1}
                             maxWidth = {'200px'}
@@ -103,7 +114,7 @@ function AccountContent({setIsAccountModalOpen, setIsConnectModalOpen}: IAccount
                             gap = {4}
                             onClick = {onCopy}
                         >
-                            <CopyIcon boxSize={isPhoneHardware(hardware) ? '21px' : '14px'}/>
+                            <CopyIcon boxSize={isPhoneHardware() ? '21px' : '14px'}/>
                             <Text  
                                 noOfLines={1}
                                 maxWidth = {'200px'}

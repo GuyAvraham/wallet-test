@@ -8,12 +8,12 @@ import useGlobalSettings from '../../../GlobalSettings/useGlobalSettings';
 
 function Logo(): JSX.Element {
 
-    const {hardware, isPhoneHardware} = useGlobalSettings();
+    const {isPhoneHardware} = useGlobalSettings();
     const {colorMode, } = useColorMode();
 
 
     return (
-        <Image width = {isPhoneHardware(hardware) ? '75px' : '50px'} src = {colorMode === 'light' ? blackLogo : whiteLogo}/>
+        <Image width = {isPhoneHardware() ? '75px' : '50px'} src = {colorMode === 'light' ? blackLogo : whiteLogo}/>
         );
 }
 

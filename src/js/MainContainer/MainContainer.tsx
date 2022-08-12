@@ -10,7 +10,7 @@ import useGlobalSettings from '../GlobalSettings/useGlobalSettings';
 
 
 function MainContainer(): JSX.Element {
-
+    
     const {mainContent} = useGlobalSettings();
   
     return (
@@ -40,4 +40,4 @@ function MainContainer(): JSX.Element {
 
 
 
-export default React.memo(MainContainer);
+export default MainContainer;

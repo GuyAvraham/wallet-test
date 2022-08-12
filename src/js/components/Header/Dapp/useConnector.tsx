@@ -12,6 +12,7 @@ const DEFAULT_CONNECTOR_VALUE = null;
 type Connector = WalletConnect | null
 type AsyncVoidFunction = Promise<void>
 type UseConnectorReturnValue = [connector: Connector, connect: ConnectToDApp, disconnect: DisconnectDApp]
+// eslint-disable-next-line no-unused-vars
 type ConnectToDApp = (uri: string, account: string, chainId: number) => AsyncVoidFunction
 type DisconnectDApp = () => AsyncVoidFunction
 
@@ -26,6 +27,7 @@ export default function useConnector(): UseConnectorReturnValue {
 
     React.useEffect(() => {
 
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         let connector: any = localStorage.getItem('walletconnect');
         if(connector) {
 
@@ -77,7 +79,7 @@ export default function useConnector(): UseConnectorReturnValue {
 
     const subscribeToEvents = (connector: WalletConnect, account: string, chainId: number) => {
   
-        connector.on("session_request", async (error, payload) => {
+        connector.on("session_request", async (error) => {
 
             if (error) {
                 throw error;
@@ -107,7 +109,7 @@ export default function useConnector(): UseConnectorReturnValue {
             });
         });
         
-        connector.on("disconnect", (error, payload) => {
+        connector.on("disconnect", (error) => {
             
             if (error) {
                 throw error;

@@ -27,7 +27,7 @@ import AlertDialogMetamask from '../../../Wallet/AlertDialogMetamask/AlertDialog
 
 function ConnectWalletContent({setIsConnectModalOpen, setIsAccountModalOpen}: IConnectWalletContentProps): JSX.Element {
     
-    const {hardware, isPhoneHardware, connectWay} = useGlobalSettings();
+    const {isPhoneHardware, connectWay} = useGlobalSettings();
     const {providerState} = useEthereumProvider();
     const {connectMetamask} = useMetamask();
     const {account} = useAccount();
@@ -42,10 +42,10 @@ function ConnectWalletContent({setIsConnectModalOpen, setIsAccountModalOpen}: IC
     }, []);
 
     const onMetamask = async () => {
-
+        
         if(providerState) return;
 
-        setIsConnecting(previous => previous = true);
+        setIsConnecting(true);
 
         await connectMetamask((isProviderDetected: boolean) => {
             
@@ -57,25 +57,29 @@ function ConnectWalletContent({setIsConnectModalOpen, setIsAccountModalOpen}: IC
         });
     }
 
+    const onCLickBackIcon = () => {
+        setIsAccountModalOpen(true); 
+        setIsConnectModalOpen(false)}
+
     const turnOffConnecting = () => {
 
         if(isConnecting === false) return;
 
-        setIsConnecting(previous => previous = false);
-        setIsAccountModalOpen(previous => previous = true);
-        setIsConnectModalOpen(previous => previous = false);
+        setIsConnecting(false);
+        setIsAccountModalOpen(true);
+        setIsConnectModalOpen(false);
     }
 
     React.useEffect(() => {
         
         if(providerState === null) { 
-            setIsConnecting(previous => previous = false);
+            setIsConnecting(false);
             return;
         }
 
         if(account.account === null) {
             
-            setIsConnecting(previous => previous = true);
+            setIsConnecting(true);
             return;
         }
         
@@ -102,8 +106,8 @@ function ConnectWalletContent({setIsConnectModalOpen, setIsAccountModalOpen}: IC
                         aria-label = {'back to account info'} 
                         icon = {
                             <ArrowBackIcon 
-                                boxSize={isPhoneHardware(hardware) ? '36px': '24px'}
-                                onClick = {() => {setIsAccountModalOpen(previous => previous = true); setIsConnectModalOpen(previous => previous = false)}}
+                                boxSize={isPhoneHardware() ? '36px': '24px'}
+                                onClick = {onCLickBackIcon}
                             />  
                         }
                         /> 
@@ -112,12 +116,12 @@ function ConnectWalletContent({setIsConnectModalOpen, setIsAccountModalOpen}: IC
                     'Connect a wallet'
                 }
             </ModalHeader>
-            <ModalCloseButton boxSize={isPhoneHardware(hardware) ? '60px': '40px'}/>
+            <ModalCloseButton boxSize={isPhoneHardware() ? '60px': '40px'}/>
             <ModalBody>
                 { 
                     isConnecting ? 
                     <Center flexDirection={'column'} gap = {5}>
-                        <Spinner size = {isPhoneHardware(hardware) ? 'xl': 'md'}/>
+                        <Spinner size = {isPhoneHardware() ? 'xl': 'md'}/>
                         <Box textAlign = {'center'} fontSize = {'md'}>Connecting...</Box>
                     </Center>
                     :
@@ -126,19 +130,19 @@ function ConnectWalletContent({setIsConnectModalOpen, setIsAccountModalOpen}: IC
                     >
                         <Button
                             onClick = {onMetamask}
-                            h = {isPhoneHardware(hardware) ? '87px': '58px'}
+                            h = {isPhoneHardware() ? '87px': '58px'}
                         >
                             <Flex direction = {'row'} width = {'100%'} gap = {4} alignItems = {'center'}>
                                 {
                                     connectWay.current === 'metamask' ?
-                                    <CheckCircleIcon color={'green'} boxSize={isPhoneHardware(hardware) ? '12px' : '8px'}/>
+                                    <CheckCircleIcon color={'green'} boxSize={isPhoneHardware() ? '12px' : '8px'}/>
                                     :
                                     <></>
                                 }
                                 
                                 <Text fontSize = {'sm'}>MetaMask</Text>
                                 <Spacer/>
-                                <Image boxSize = {isPhoneHardware(hardware) ? '36px': '24px'} src = {'https://app.uniswap.org/static/media/metamask.02e3ec27.png'}/>
+                                <Image boxSize = {isPhoneHardware() ? '36px': '24px'} src = {'https://app.uniswap.org/static/media/metamask.02e3ec27.png'}/>
                             </Flex>
                         </Button>
                     </Flex>

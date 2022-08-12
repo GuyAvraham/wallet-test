@@ -18,8 +18,8 @@ import { IAlertDialogMetamaskProps } from '../../../types/Metamask/AlertDialogMe
 
 function AlertDialogMetamask({isOpen, onClose}: IAlertDialogMetamaskProps): JSX.Element {
 
-    const downloadRef = React.useRef<any>();
-    const {isPhoneHardware, hardware} = useGlobalSettings();
+    const downloadRef = React.useRef<HTMLButtonElement>(null);
+    const {isPhoneHardware} = useGlobalSettings();
     
 
     return (
@@ -27,11 +27,11 @@ function AlertDialogMetamask({isOpen, onClose}: IAlertDialogMetamaskProps): JSX.
             isOpen = {isOpen}
             leastDestructiveRef={downloadRef}
             onClose = {onClose}
-            size = {isPhoneHardware(hardware) ? '3xl' : 'xl'}
+            size = {isPhoneHardware() ? '3xl' : 'xl'}
         >
             <AlertDialogOverlay/>
             <AlertDialogContent 
-                height = {isPhoneHardware(hardware) ? '300px' : '200px'} 
+                height = {isPhoneHardware() ? '300px' : '200px'} 
                 bg = {'alertDialogWindow'}
             >
                 <AlertDialogHeader fontSize = {'lg'}>
@@ -39,7 +39,7 @@ function AlertDialogMetamask({isOpen, onClose}: IAlertDialogMetamaskProps): JSX.
                 </AlertDialogHeader>
                 <AlertDialogBody fontSize = {'md'}>
                     {
-                        isPhoneHardware(hardware) ?
+                        isPhoneHardware() ?
                         <Text>Please, open your Metamask app and go to this site by browser in the app</Text>
                         :
                         <Text>You have to download Metamask to your chrome browser!</Text>
@@ -54,7 +54,7 @@ function AlertDialogMetamask({isOpen, onClose}: IAlertDialogMetamaskProps): JSX.
                             fontSize = {'md'}
                         >
                             {
-                                isPhoneHardware(hardware) ?
+                                isPhoneHardware() ?
                                 <Text p = {7}>Okey!</Text>
                                 :
                                 <LinkOverlay isExternal href = {'https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn'}>
