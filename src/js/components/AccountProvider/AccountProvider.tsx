@@ -9,7 +9,7 @@ export const DEFAULT_ACCOUNT_VALUE: IAccount = {
   icon: null,
 };
 
-const DEFAULT_ACCOUNT_CONTEXT_VALUE: IAccountProvider = {
+export const DEFAULT_ACCOUNT_CONTEXT_VALUE: IAccountProvider = {
   account: DEFAULT_ACCOUNT_VALUE,
   setAccount: () => {
     return;
@@ -23,12 +23,13 @@ export const AccountContext = React.createContext<IAccountProvider>(
 export default function AccountProvider({ children }: IProviderProps) {
   const [account, setAccount] = React.useState<IAccount>(DEFAULT_ACCOUNT_VALUE);
 
-  const contextValue = React.useMemo(() => {
-    return {
+  const contextValue = React.useMemo(
+    () => ({
       account,
       setAccount,
-    };
-  }, [account, setAccount]);
+    }),
+    [account, setAccount]
+  );
 
   return (
     <AccountContext.Provider value={contextValue}>

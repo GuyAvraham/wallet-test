@@ -41,113 +41,108 @@
 // }
 
 {
-    "extends": [
-        "eslint:recommended",
-        "plugin:react/recommended",
-        "plugin:@typescript-eslint/recommended",
-        "prettier"
+  "extends": [
+    "eslint:recommended",
+    "plugin:react/recommended",
+    "plugin:@typescript-eslint/recommended",
+    "prettier"
+  ],
+  "rules": {
+    "no-only-tests/no-only-tests": [
+      "error",
+      {
+        "block": ["describe", "it"],
+        "focus": ["only"]
+      }
     ],
-    "rules": {
-        "no-only-tests/no-only-tests": [
-            "error",
-            {
-              "block": ["describe", "it"],
-              "focus": ["only"]
-            }
-          ],
-          // "import/extensions": [
-          //   "error",
-          //   "ignorePackages",
-          //   {
-          //     "js": "never",
-          //     "jsx": "never",
-          //     "ts": "never",
-          //     "tsx": "never",
-          //     "json": "always",
-          //     "svg": "always"
-          //   }
-          // ],
-          "no-use-before-define": "off",
-          "import/no-named-as-default": "off",
-          "import/no-named-as-default-member": "off",
-          "func-names": ["error", "never"],
-          "max-len": ["error", { "code": 1200 }],
-          "no-param-reassign": ["error", { "props": false }],
-          "class-methods-use-this": "off",
-          "object-curly-newline": [
-            "error",
-            {
-              "ObjectExpression": { "multiline": true, "consistent": true },
-              "ObjectPattern": { "multiline": true, "consistent": true },
-              "ImportDeclaration": { "multiline": true, "consistent": true },
-              "ExportDeclaration": { "multiline": true, "consistent": true }
-            }
-          ],
-          "no-restricted-syntax": [
-            "error",
-            {
-              "selector": "LabeledStatement",
-              "message": "Labels are a form of GOTO; using them makes code confusing and hard to maintain and understand."
-            },
-            {
-              "selector": "WithStatement",
-              "message": "`with` is disallowed in strict mode because it makes code impossible to predict and optimize."
-            }
-          ],
-          "no-underscore-dangle": [
-            "error",
-            { "allow": ["_id", "_isMounted", "_url"] }
-          ],
-          "react/jsx-filename-extension": [1, { "extensions": [".js", ".tsx"] }],
-          "jsx-a11y/anchor-is-valid": [
-            "error",
-            {
-              "components": ["Link"],
-              "specialLink": ["to"],
-              "aspects": ["noHref", "invalidHref", "preferButton"]
-            }
-          ],
-          "react/require-default-props": "off",
-          "react/style-prop-object": "off",
-          "react-hooks/rules-of-hooks": "error",
-          "react-hooks/exhaustive-deps": [
-            "warn",
-            {
-              // enable warnings also for useDeepCompareEffect.
-              "additionalHooks": "useDeepCompareEffect"
-            }
-          ],
-          "no-shadow": "off",
-          "no-console": "off",
-          "no-unused-expressions": [
-            "error",
-            {
-              "allowShortCircuit": true
-            }
-          ],
-      
-          // to be reviewed
-          "jsx-a11y/label-has-for": "off",
-          "react/no-array-index-key": "error",
-          "react/jsx-closing-tag-location": "off",
-          "import/prefer-default-export": "off",
-          "padding-line-between-statements": [
-            "error",
-            { "blankLine": "always", "prev": "if", "next": "*" },
-            { "blankLine": "always", "prev": "while", "next": "*" },
-            { "blankLine": "always", "prev": "for", "next": "*" },
-            { "blankLine": "always", "prev": "do", "next": "*" },
-            { "blankLine": "always", "prev": "switch", "next": "*" },
-            { "blankLine": "always", "prev": "try", "next": "*" }
-          ],
-          "react/sort-comp": "off",
-          "no-unused-vars": ["error", { "ignoreRestSiblings": true }],
-          "import/no-default-export": "off"
-    },
-    "plugins": [
-        "no-only-tests",
-        "jsx-a11y",
-        "react-hooks",
-        "prettier"
-    ]
+    // "import/extensions": [
+    //   "error",
+    //   "ignorePackages",
+    //   {
+    //     "js": "never",
+    //     "jsx": "never",
+    //     "ts": "never",
+    //     "tsx": "never",
+    //     "json": "always",
+    //     "svg": "always"
+    //   }
+    // ],
+    "no-use-before-define": "off",
+    "import/no-named-as-default": "off",
+    "import/no-named-as-default-member": "off",
+    "func-names": ["error", "never"],
+    "max-len": ["error", { "code": 1200 }],
+    "no-param-reassign": ["error", { "props": false }],
+    "class-methods-use-this": "off",
+    "object-curly-newline": [
+      "error",
+      {
+        "ObjectExpression": { "multiline": true, "consistent": true },
+        "ObjectPattern": { "multiline": true, "consistent": true },
+        "ImportDeclaration": { "multiline": true, "consistent": true },
+        "ExportDeclaration": { "multiline": true, "consistent": true }
+      }
+    ],
+    "no-restricted-syntax": [
+      "error",
+      {
+        "selector": "LabeledStatement",
+        "message": "Labels are a form of GOTO; using them makes code confusing and hard to maintain and understand."
+      },
+      {
+        "selector": "WithStatement",
+        "message": "`with` is disallowed in strict mode because it makes code impossible to predict and optimize."
+      }
+    ],
+    "no-underscore-dangle": [
+      "error",
+      { "allow": ["_id", "_isMounted", "_url"] }
+    ],
+    "react/jsx-filename-extension": [1, { "extensions": [".js", ".tsx"] }],
+    "jsx-a11y/anchor-is-valid": [
+      "error",
+      {
+        "components": ["Link"],
+        "specialLink": ["to"],
+        "aspects": ["noHref", "invalidHref", "preferButton"]
+      }
+    ],
+    "react/require-default-props": "off",
+    "react/style-prop-object": "off",
+    "react-hooks/rules-of-hooks": "error",
+    "react-hooks/exhaustive-deps": [
+      "warn",
+      {
+        // enable warnings also for useDeepCompareEffect.
+        "additionalHooks": "useDeepCompareEffect"
+      }
+    ],
+    "no-shadow": "off",
+    "no-console": "off",
+    "no-unused-expressions": [
+      "error",
+      {
+        "allowShortCircuit": true
+      }
+    ],
+
+    // to be reviewed
+    "jsx-a11y/label-has-for": "off",
+    "react/no-array-index-key": "error",
+    "react/jsx-closing-tag-location": "off",
+    "import/prefer-default-export": "off",
+    "padding-line-between-statements": [
+      "error",
+      { "blankLine": "always", "prev": "if", "next": "*" },
+      { "blankLine": "always", "prev": "while", "next": "*" },
+      { "blankLine": "always", "prev": "for", "next": "*" },
+      { "blankLine": "always", "prev": "do", "next": "*" },
+      { "blankLine": "always", "prev": "switch", "next": "*" },
+      { "blankLine": "always", "prev": "try", "next": "*" }
+    ],
+    "react/sort-comp": "off",
+    //"no-unused-vars": ["error", { "ignoreRestSiblings": true }],
+    "import/no-default-export": "off"
+  },
+  "plugins": ["no-only-tests", "jsx-a11y", "react-hooks", "prettier"]
 }

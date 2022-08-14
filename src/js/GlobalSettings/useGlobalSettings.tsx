@@ -1,13 +1,13 @@
 import * as React from "react";
-import { GlobalSettingsContext } from "./GlobalSettingsProvider";
+import { DEFAULT_GLOBAL_SETTINGS_CONTEXT_VALUE, GlobalSettingsContext } from "./GlobalSettingsProvider";
 
 export default function useGlobalSettings() {
   const globalSettings = React.useContext(GlobalSettingsContext);
 
-  if (globalSettings === undefined)
-    throw new Error(
-      "useGlobalSettings must be used within a GlobalSettingsProvider"
-    );
+  if (!globalSettings) {
+    console.error("useGlobalSettings must be used within a GlobalSettingsProvider");
+    return DEFAULT_GLOBAL_SETTINGS_CONTEXT_VALUE;
+  }
 
   return globalSettings;
 }

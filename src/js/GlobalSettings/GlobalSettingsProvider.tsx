@@ -9,23 +9,22 @@ import {
 } from "../types/Types";
 import AlertDialogErrorProvider from "../components/AlertDialogErrorProvider/AlertDialogErrorProvider";
 import MetamaskProvider from "../components/ConnectMetamask/MetamaskProvider";
-import {
-  DEFAULT_HARDWARE_TYPE,
-  detectHardware,
-  isPhoneHardware,
-} from "./Hardware/Hardware";
+import { DEFAULT_HARDWARE_TYPE, detectHardware } from "./Hardware/Hardware";
 import useMainContent from "./MainContentView/useMainContent";
+import { isMobile } from "react-device-detect";
 
-const DEFAULT_CONTEXT_VALUE: IGlobalSettingsProvider = {
+export const DEFAULT_GLOBAL_SETTINGS_CONTEXT_VALUE: IGlobalSettingsProvider = {
   hardware: DEFAULT_HARDWARE_TYPE,
-  isPhoneHardware,
+  isMobile,
   mainContent: "wallet",
-  setMainContent: () => {},
+  setMainContent: () => { 
+    return; 
+  },
   connectWay: { current: "" },
 };
 
 export const GlobalSettingsContext =
-  React.createContext<IGlobalSettingsProvider>(DEFAULT_CONTEXT_VALUE);
+  React.createContext<IGlobalSettingsProvider>(DEFAULT_GLOBAL_SETTINGS_CONTEXT_VALUE);
 
 export default function GlobalSettingsProvider({
   children,
@@ -35,15 +34,16 @@ export default function GlobalSettingsProvider({
 
   const hardware: Hardware = React.useMemo(() => detectHardware(), []);
 
-  const contextValue = React.useMemo(() => {
-    return {
+  const contextValue = React.useMemo(
+    () => ({
       hardware,
-      isPhoneHardware,
+      isMobile,
       mainContent,
       setMainContent,
       connectWay,
-    };
-  }, [hardware, isPhoneHardware, mainContent, setMainContent, connectWay]);
+    }),
+    [hardware, isMobile, mainContent, setMainContent, connectWay]
+  );
 
   return (
     <GlobalSettingsContext.Provider value={contextValue}>

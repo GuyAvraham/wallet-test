@@ -5,6 +5,7 @@ import {
   ModalOverlay,
   Text,
   Tooltip,
+  useDisclosure,
 } from "@chakra-ui/react";
 import * as React from "react";
 import useGlobalSettings from "../../../GlobalSettings/useGlobalSettings";
@@ -14,30 +15,28 @@ import ConnectWalletContent from "./ModalContents/ConnectWalletContent";
 
 function AccountMenu() {
   const { account } = useAccount();
-  const { isPhoneHardware } = useGlobalSettings();
-  const [isAccountModalOpen, setIsAccountModalOpen] =
-    React.useState<boolean>(false);
-  const [isConnectModalOpen, setIsConnectModalOpen] =
-    React.useState<boolean>(false);
+  const { isMobile } = useGlobalSettings();
+  const {
+    isOpen: isAccountOpen,
+    onOpen: onOpenAccount,
+    onClose: onCloseAccount,
+  } = useDisclosure();
+  const {
+    isOpen: isConnectOpen,
+    onOpen: onOpenConnect,
+    onClose: onCloseConnect,
+  } = useDisclosure();
 
   const onCloseModal = () => {
-    setIsAccountModalOpen(false);
-    setIsConnectModalOpen(false);
-  };
-
-  const onAccountModalOpen = () => {
-    setIsAccountModalOpen(true);
-  };
-
-  const onConnectModalOpen = () => {
-    setIsConnectModalOpen(true);
+    onCloseAccount();
+    onCloseConnect();
   };
 
   return (
     <>
       <Flex
         direction={"row"}
-        h={isPhoneHardware() ? "75px" : "50px"}
+        h={isMobile ? "75px" : "50px"}
         borderWidth={1}
         alignItems={"center"}
         borderRadius={20}
@@ -53,10 +52,10 @@ function AccountMenu() {
                 {account.balance?.toFixed(2)} ETH
               </Text>
             </Tooltip>
-            <Button h={"100%"} onClick={onAccountModalOpen}>
+            <Button h={"100%"} onClick={onOpenAccount}>
               <Text
                 noOfLines={1}
-                maxW={isPhoneHardware() ? "195px" : "130px"}
+                maxW={isMobile ? "195px" : "130px"}
                 display={"block !important"}
                 fontSize={"sm"}
               >
@@ -66,9 +65,9 @@ function AccountMenu() {
           </>
         ) : (
           <Button
-            w={isPhoneHardware() ? "300px" : "200px"}
+            w={isMobile ? "300px" : "200px"}
             h={"100%"}
-            onClick={onConnectModalOpen}
+            onClick={onOpenConnect}
             fontSize={"sm"}
           >
             Connect Wallet
@@ -77,30 +76,28 @@ function AccountMenu() {
       </Flex>
       <Modal
         isOpen={
-          (isAccountModalOpen && account.account) || isConnectModalOpen
-            ? true
-            : false
+          (isAccountOpen && account.account) || isConnectOpen ? true : false
         }
         onClose={onCloseModal}
-        size={isPhoneHardware() ? "3xl" : "md"}
+        size={isMobile ? "3xl" : "md"}
       >
         <ModalOverlay />
         {account.account ? (
-          isConnectModalOpen ? (
+          isConnectOpen ? (
             <ConnectWalletContent
-              setIsAccountModalOpen={setIsAccountModalOpen}
-              setIsConnectModalOpen={setIsConnectModalOpen}
+              onOpenAccount={onOpenAccount}
+              onCloseConnect={onCloseConnect}
             />
           ) : (
             <AccountContent
-              setIsAccountModalOpen={setIsAccountModalOpen}
-              setIsConnectModalOpen={setIsConnectModalOpen}
+            onCloseAccount={onCloseAccount}
+            onOpenConnect={onOpenConnect}
             />
           )
         ) : (
           <ConnectWalletContent
-            setIsAccountModalOpen={setIsAccountModalOpen}
-            setIsConnectModalOpen={setIsConnectModalOpen}
+            onOpenAccount={onOpenAccount}
+            onCloseConnect={onCloseConnect}
           />
         )}
       </Modal>

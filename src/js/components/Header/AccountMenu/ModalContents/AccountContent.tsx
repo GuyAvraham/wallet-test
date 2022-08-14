@@ -18,29 +18,29 @@ import useAccount from "../../../AccountProvider/useAccount";
 import useMetamask from "../../../ConnectMetamask/useMetamask";
 
 function AccountContent({
-  setIsAccountModalOpen,
-  setIsConnectModalOpen,
+  onCloseAccount,
+  onOpenConnect
 }: IAccountContentProps): JSX.Element {
   const { account } = useAccount();
   const { onDisconnect } = useMetamask();
   const { hasCopied, onCopy } = useClipboard(
     account.account ? account.account : ""
   );
-  const { isPhoneHardware } = useGlobalSettings();
+  const { isMobile } = useGlobalSettings();
 
   const smallButtonStyle = {
-    fontSize: isPhoneHardware() ? "27px" : "13px",
+    fontSize: isMobile ? "27px" : "13px",
     borderWidth: 1,
   };
 
   const onClickDisconnect = () => {
     onDisconnect();
-    setIsAccountModalOpen(false);
+    onCloseAccount();
   };
 
   const onClickChange = () => {
-    setIsAccountModalOpen(false);
-    setIsConnectModalOpen(true);
+    onCloseAccount();
+    onOpenConnect();
   };
 
   return (
@@ -52,7 +52,7 @@ function AccountContent({
           px={2}
           borderWidth={1}
           borderRadius={20}
-          h={isPhoneHardware() ? "225px" : "150px"}
+          h={isMobile ? "225px" : "150px"}
           direction={"column"}
           gap={0}
         >
@@ -62,7 +62,7 @@ function AccountContent({
             </Text>
             <Spacer />
             <Button
-              size={isPhoneHardware() ? "lg" : "xs"}
+              size={isMobile ? "lg" : "xs"}
               borderColor={"red"}
               sx={smallButtonStyle}
               onClick={onClickDisconnect}
@@ -70,7 +70,7 @@ function AccountContent({
               Disconnect
             </Button>
             <Button
-              size={isPhoneHardware() ? "lg" : "xs"}
+              size={isMobile ? "lg" : "xs"}
               sx={smallButtonStyle}
               borderColor={"blue"}
               onClick={onClickChange}
@@ -81,7 +81,7 @@ function AccountContent({
           <Flex direction={"row"} alignItems={"center"} gap={4} flex={1}>
             <CheckCircleIcon
               color={"green"}
-              boxSize={isPhoneHardware() ? "30px" : "20px"}
+              boxSize={isMobile ? "30px" : "20px"}
             />
             <Text noOfLines={1} maxWidth={"200px"} fontSize={"md"}>
               {account.account}
@@ -98,7 +98,7 @@ function AccountContent({
               gap={4}
               onClick={onCopy}
             >
-              <CopyIcon boxSize={isPhoneHardware() ? "21px" : "14px"} />
+              <CopyIcon boxSize={isMobile ? "21px" : "14px"} />
               <Text noOfLines={1} maxWidth={"200px"} fontSize={"xs"}>
                 {hasCopied ? "Address is copied" : "Copy Address"}
               </Text>

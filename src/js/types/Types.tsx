@@ -2,7 +2,7 @@ import * as React from "react";
 
 export interface IGlobalSettingsProvider extends IUseMainContent {
   hardware: Hardware;
-  isPhoneHardware: () => boolean;
+  isMobile: boolean;
   connectWay: React.MutableRefObject<ConnectWay>;
 }
 

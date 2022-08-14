@@ -16,7 +16,7 @@ import useAccount from "../../AccountProvider/useAccount";
 import ThemeSwitcher from "../ThemeSwitcher/ThemeSwitcher";
 
 function DropdownMenu(): JSX.Element {
-  const { isPhoneHardware, mainContent, setMainContent } = useGlobalSettings();
+  const { isMobile, mainContent, setMainContent } = useGlobalSettings();
   const { account } = useAccount();
 
   const onClickSetMainContent = () =>
@@ -30,7 +30,7 @@ function DropdownMenu(): JSX.Element {
 
   return (
     <Box
-      boxSize={isPhoneHardware() ? "75px" : "50px"}
+      boxSize={isMobile ? "75px" : "50px"}
       borderWidth={1}
       p={1}
       borderRadius={20}

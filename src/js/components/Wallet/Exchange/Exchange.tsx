@@ -35,7 +35,7 @@ function parseCurrencyText(value: number): string {
 function Exchange(): JSX.Element {
   const { account } = useAccount();
   const [exchange, setExchange] = React.useState<IExchange | null>(null);
-  const { isPhoneHardware } = useGlobalSettings();
+  const { isMobile } = useGlobalSettings();
 
   const currencyTextStyle = {
     maxW: "250px",
@@ -52,11 +52,9 @@ function Exchange(): JSX.Element {
     <Flex direction={"column"} width={"100%"} gap={5}>
       <ExchangeUpdater setExchange={setExchange} />
       <Flex direction={"row"}>
-        <Heading size={isPhoneHardware() ? "3xl" : "2xl"}>
-          Exchange Rates
-        </Heading>
+        <Heading size={isMobile ? "3xl" : "2xl"}>Exchange Rates</Heading>
         <Spacer />
-        <Heading size={isPhoneHardware() ? "3xl" : "2xl"}>In transfer</Heading>
+        <Heading size={isMobile ? "3xl" : "2xl"}>In transfer</Heading>
       </Flex>
       {exchange ? (
         Object.keys(exchange).map((currency) => (

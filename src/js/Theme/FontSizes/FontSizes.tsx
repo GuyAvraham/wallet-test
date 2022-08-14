@@ -1,10 +1,10 @@
-import { isPhoneHardware } from "../../GlobalSettings/Hardware/Hardware";
+import { isMobile } from "react-device-detect";
 
 const fontSizes = {
-  xs: isPhoneHardware() ? "21px" : "14px",
-  sm: isPhoneHardware() ? "24px" : "16px",
-  md: isPhoneHardware() ? "30px" : "20px",
-  lg: isPhoneHardware() ? "40px" : "25px",
+  xs: isMobile ? "21px" : "14px",
+  sm: isMobile ? "24px" : "16px",
+  md: isMobile ? "30px" : "20px",
+  lg: isMobile ? "40px" : "25px",
 };
 
 export default fontSizes;

@@ -16,7 +16,7 @@ import useAccount from "../AccountProvider/useAccount";
 import useAlertDialogError from "../AlertDialogErrorProvider/useAlertDialogError";
 import useEthereumProvider from "../EthereumProvider/useEthereumProvider";
 
-const DEFAULT_ACCOUNT_CONTEXT_VALUE: IMetamaskProvider = {
+export const DEFAULT_METAMASk_CONTEXT_VALUE: IMetamaskProvider = {
   disconnectDapp: {
     current: null,
   },
@@ -35,7 +35,7 @@ const DEFAULT_ACCOUNT_CONTEXT_VALUE: IMetamaskProvider = {
 };
 
 export const MetamaskContext = React.createContext<IMetamaskProvider>(
-  DEFAULT_ACCOUNT_CONTEXT_VALUE
+  DEFAULT_METAMASk_CONTEXT_VALUE
 );
 
 function parseEth(eth: string): number {
@@ -65,7 +65,6 @@ export default function MetamaskProvider({ children }: IProviderProps) {
     setAccount(DEFAULT_ACCOUNT_VALUE);
   };
 
-  // eslint-disable-next-line no-unused-vars
   const connectMetamask = React.useCallback(
     async (callback: (isProviderDetected: boolean) => void) => {
       if (providerState) return;
@@ -80,8 +79,10 @@ export default function MetamaskProvider({ children }: IProviderProps) {
   const updateAccountData = (accountName: string) => {
     let acc: IAccount = { ...account, account: accountName };
 
-    if (!providerState)
-      throw new Error("providerState equals to " + providerState);
+    if (!providerState) {
+      console.error("providerState equals to " + providerState); 
+      return;
+    }
 
     providerState
       .request({ method: "eth_getBalance", params: [accountName, "latest"] })
@@ -100,17 +101,16 @@ export default function MetamaskProvider({ children }: IProviderProps) {
       });
   };
 
-  const changeChain = async (chainId: string) => {
-    if (!providerState)
-      throw new Error("providerState equals to " + providerState);
+  const changeChain = async (chainId: string): Promise<boolean> => {
+    if (!providerState) {
+      console.error("providerState equals to " + providerState); 
+      return false;
+    }
 
     await providerState
       .request({
         method: "wallet_switchEthereumChain",
         params: [{ chainId: chainId }],
-      })
-      .then((result) => {
-        console.log(result);
       })
       .catch(async (error) => {
         if (error.code === -32002) {
@@ -138,7 +138,7 @@ export default function MetamaskProvider({ children }: IProviderProps) {
               return true;
             })
             .catch((error) => {
-              console.log(error);
+              console.error(error);
               return false;
             });
         }
@@ -169,8 +169,10 @@ export default function MetamaskProvider({ children }: IProviderProps) {
     };
 
     const onConnect = async (): Promise<void> => {
-      if (!providerState)
-        throw new Error("providerState equals to " + providerState);
+      if (!providerState) {
+        console.error("providerState equals to " + providerState); 
+        return;
+      }
 
       const changedAccount: string[] = await providerState.request({
         method: "eth_requestAccounts",
@@ -179,8 +181,10 @@ export default function MetamaskProvider({ children }: IProviderProps) {
     };
 
     const subscribeEvents = async (): Promise<void> => {
-      if (!providerState)
-        throw new Error("providerState equals to " + providerState);
+      if (!providerState) {
+        console.error("providerState equals to " + providerState); 
+        return;
+      }
 
       await providerState.on("chainChanged", onConnect);
       await providerState.on("accountsChanged", onAccountChanged);
@@ -189,8 +193,10 @@ export default function MetamaskProvider({ children }: IProviderProps) {
     };
 
     const onProviderChanged = async () => {
-      if (!providerState)
-        throw new Error("providerState equals to " + providerState);
+      if (!providerState) {
+        console.error("providerState equals to " + providerState); 
+        return;
+      }
 
       await subscribeEvents();
 
@@ -217,21 +223,22 @@ export default function MetamaskProvider({ children }: IProviderProps) {
     onProviderChanged();
   }, [providerState]);
 
-  const contextValue = React.useMemo(() => {
-    return {
+  const contextValue = React.useMemo(
+    () => ({
       disconnectDapp,
       onDisconnect,
       changeChain,
       updateAccountData,
       connectMetamask,
-    };
-  }, [
-    disconnectDapp,
-    onDisconnect,
-    changeChain,
-    updateAccountData,
-    connectMetamask,
-  ]);
+    }),
+    [
+      disconnectDapp,
+      onDisconnect,
+      changeChain,
+      updateAccountData,
+      connectMetamask,
+    ]
+  );
 
   return (
     <MetamaskContext.Provider value={contextValue}>

@@ -29,7 +29,7 @@ import useAccount from "../../AccountProvider/useAccount";
 import useMetamask from "../../ConnectMetamask/useMetamask";
 
 function NetworkSelector(): JSX.Element {
-  const { isPhoneHardware } = useGlobalSettings();
+  const { isMobile } = useGlobalSettings();
   const { account } = useAccount();
   const { changeChain } = useMetamask();
   const [isSmallNetworkIcon] = useMediaQuery("(max-width: 800px)");
@@ -45,12 +45,7 @@ function NetworkSelector(): JSX.Element {
     );
 
   return (
-    <Box
-      h={isPhoneHardware() ? "75px" : "50px"}
-      borderWidth={1}
-      p={1}
-      borderRadius={20}
-    >
+    <Box h={isMobile ? "75px" : "50px"} borderWidth={1} p={1} borderRadius={20}>
       <Menu>
         <MenuButton boxSize={"100%"} as={Button}>
           {currentChain === "Select Network" ? (
@@ -62,9 +57,9 @@ function NetworkSelector(): JSX.Element {
               alignItems={"center"}
               gap={1}
             >
-              {isSmallNetworkIcon || isPhoneHardware() ? (
+              {isSmallNetworkIcon || isMobile ? (
                 <Image
-                  boxSize={isPhoneHardware() ? "30px" : "20px"}
+                  boxSize={isMobile ? "30px" : "20px"}
                   src={
                     IMAGES_BY_NETWORK[currentChain as keyof IImagesByNetwork]
                   }
@@ -74,7 +69,7 @@ function NetworkSelector(): JSX.Element {
                   <Text fontSize={"sm"}>{currentChain}</Text>
                   <Spacer />
                   <Image
-                    boxSize={isPhoneHardware() ? "30px" : "20px"}
+                    boxSize={isMobile ? "30px" : "20px"}
                     src={
                       IMAGES_BY_NETWORK[currentChain as keyof IImagesByNetwork]
                     }
@@ -103,7 +98,7 @@ function NetworkSelector(): JSX.Element {
                   </Text>
                   <Spacer />
                   <Image
-                    boxSize={isPhoneHardware() ? "30px" : "20px"}
+                    boxSize={isMobile ? "30px" : "20px"}
                     src={IMAGES_BY_NETWORK[element as keyof IImagesByNetwork]}
                   />
                 </Flex>
@@ -121,10 +116,7 @@ function NetworkSelector(): JSX.Element {
                 Please, connect in your wallet
               </Box>
               <Spacer />
-              <Icon
-                boxSize={isPhoneHardware() ? "30px" : "20px"}
-                alignSelf={"center"}
-              />
+              <Icon boxSize={isMobile ? "30px" : "20px"} alignSelf={"center"} />
             </Flex>
           )}
         </MenuList>

@@ -4,15 +4,11 @@ import useGlobalSettings from "../../../GlobalSettings/useGlobalSettings";
 
 function ThemeSwitcher(): JSX.Element {
   const { colorMode, toggleColorMode } = useColorMode();
-  const { isPhoneHardware } = useGlobalSettings();
+  const { isMobile } = useGlobalSettings();
 
   return (
     <>
-      <Text
-        pl={3}
-        fontSize={isPhoneHardware() ? "30px" : "20px"}
-        fontWeight={"bold"}
-      >
+      <Text pl={3} fontSize={isMobile ? "30px" : "20px"} fontWeight={"bold"}>
         Dark Mode
       </Text>
       <Spacer />
@@ -20,7 +16,7 @@ function ThemeSwitcher(): JSX.Element {
         mr={3}
         isChecked={colorMode === "dark"}
         onChange={toggleColorMode}
-        size={isPhoneHardware() ? "lg" : "md"}
+        size={isMobile ? "lg" : "md"}
       />
     </>
   );

@@ -22,8 +22,10 @@ function NewBlockEvent(): JSX.Element {
     if (hashes.length > 0) {
       // block has been changed
 
-      if (!account.account)
-        throw new Error("account.account equals to " + account.account);
+      if (!account.account) {
+        console.error("account.account equals to " + account.account);
+        return;
+      }
 
       updateAccountData(account.account);
       newBlockInfo.current.hashes = hashes;
@@ -36,15 +38,17 @@ function NewBlockEvent(): JSX.Element {
 
     if (!filterId) return;
 
-    if (!providerState)
-      throw new Error("providerState equals to " + providerState);
+    if (!providerState){
+      console.error("providerState equals to " + providerState);
+      return;
+    }
 
     providerState
       .request({ method: "eth_getFilterChanges", params: [filterId] })
       .then((hashes) => {
         isBlockChanged(hashes);
       })
-      .catch((error) => console.log(error));
+      .catch((error) => console.error(error));
 
     if (account.account)
       setTimeout(() => setUpdater((previous) => !previous), 500);
@@ -53,9 +57,11 @@ function NewBlockEvent(): JSX.Element {
   React.useEffect(() => {
     if (account.account === null) return;
 
-    if (!providerState)
-      throw new Error("providerState equals to " + providerState);
-
+    if (!providerState) {
+      console.error("providerState equals to " + providerState);
+      return;
+    } 
+     
     providerState
       .request({ method: "eth_newBlockFilter" })
       .then((filterId: string) => {
@@ -64,7 +70,7 @@ function NewBlockEvent(): JSX.Element {
         setUpdater((previous) => !previous);
       })
       .catch((error) => {
-        console.log(error);
+        console.error(error);
       });
   }, [account.account]);
 
