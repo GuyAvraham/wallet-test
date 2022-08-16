@@ -39,6 +39,6 @@ export default function getTransactions(account: IAccount) {
       return result.json();
     })
     .catch((error) => {
-      console.log(error);
+      console.error(error);
     });
 }

@@ -9,6 +9,6 @@ export default async function getExchange(): Promise<IExchange> {
       return result.json();
     })
     .catch((error) => {
-      console.log(error);
+      console.error(error);
     });
 }

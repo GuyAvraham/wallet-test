@@ -12,7 +12,7 @@ import { IProviderProps } from "../../types/Types";
 import useGlobalSettings from "../../GlobalSettings/useGlobalSettings";
 import { IAlertDialogErrorProvider } from "../../types/AlertDialogProvider/AlertDialogProvider";
 
-const DEFAULT_ALERT_DIALOG_CONTEXT_VALUE: IAlertDialogErrorProvider = {
+export const DEFAULT_ALERT_DIALOG_CONTEXT_VALUE: IAlertDialogErrorProvider = {
   alertDialogError: () => {
     return;
   },
@@ -29,7 +29,7 @@ function AlertDialogError({ children }: IProviderProps): JSX.Element {
   const headerRef = React.useRef<string>("");
   const alertMessageRef = React.useRef<string>("");
   const buttonMessageRef = React.useRef<string>("");
-  const { isPhoneHardware } = useGlobalSettings();
+  const { isMobile } = useGlobalSettings();
 
   const alertDialogError = (
     header: string,
@@ -51,7 +51,7 @@ function AlertDialogError({ children }: IProviderProps): JSX.Element {
         isOpen={isOpen}
         onClose={onCloseAlertDialog}
         leastDestructiveRef={closeButtonRef}
-        size={isPhoneHardware() ? "3xl" : "xl"}
+        size={isMobile ? "3xl" : "xl"}
       >
         <AlertDialogOverlay />
         <AlertDialogContent>

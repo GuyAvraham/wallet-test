@@ -1,9 +1,9 @@
 export interface IAccountContentProps {
-  setIsAccountModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  setIsConnectModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  onCloseAccount: () => void;
+  onOpenConnect: () => void;
 }
 
 export interface IConnectWalletContentProps {
-  setIsAccountModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  setIsConnectModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  onOpenAccount: () => void;
+  onCloseConnect: () => void;
 }

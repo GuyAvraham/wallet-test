@@ -15,6 +15,7 @@ import {
 } from "@chakra-ui/react";
 import * as React from "react";
 import useGlobalSettings from "../../GlobalSettings/useGlobalSettings";
+import { ITransaction } from "../../types/Transactions/Transactions";
 import useAccount from "../AccountProvider/useAccount";
 import getTransactions from "./getTransactions";
 
@@ -27,9 +28,10 @@ function ethParse(value: number) {
 }
 
 function Transactions(): JSX.Element {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const [transactions, setTransactions] = React.useState<any[] | null>(null);
-  const { isPhoneHardware } = useGlobalSettings();
+  const [transactions, setTransactions] = React.useState<ITransaction[] | null>(
+    null
+  );
+  const { isMobile } = useGlobalSettings();
   const { account } = useAccount();
 
   React.useEffect(() => {
@@ -38,7 +40,7 @@ function Transactions(): JSX.Element {
     getTransactions(account).then((transactionsInfo) => {
       if (transactionsInfo.status === "0") return;
 
-      setTransactions(transactionsInfo.result);
+      setTransactions(transactionsInfo.result as ITransaction[]);
     });
   }, []);
 
@@ -61,7 +63,7 @@ function Transactions(): JSX.Element {
 
           <Tbody>
             {transactions.map((transaction) => (
-              <Tr key={transaction.hash} h={isPhoneHardware() ? 220 : 120}>
+              <Tr key={transaction.hash} h={isMobile ? 220 : 120}>
                 <Td>
                   <Tooltip label={transaction.hash} placement={"bottom-start"}>
                     <Text
@@ -99,20 +101,22 @@ function Transactions(): JSX.Element {
                   </Tooltip>
                 </Td>
                 <Td>
-                  <Tooltip label={convertToNormalDate(transaction.timeStamp)}>
+                  <Tooltip
+                    label={convertToNormalDate(Number(transaction.timeStamp))}
+                  >
                     <Text
                       maxW={"100px"}
                       noOfLines={1}
                       display={"block !important"}
                       fontWeight={"bold"}
                     >
-                      {convertToNormalDate(transaction.timeStamp)}
+                      {convertToNormalDate(Number(transaction.timeStamp))}
                     </Text>
                   </Tooltip>
                 </Td>
                 <Td isNumeric>
                   <Tooltip
-                    label={ethParse(transaction.value)}
+                    label={ethParse(Number(transaction.value))}
                     placement={"bottom-end"}
                   >
                     <Text
@@ -122,7 +126,7 @@ function Transactions(): JSX.Element {
                       fontWeight={"bold"}
                       textAlign={"end"}
                     >
-                      {ethParse(transaction.value)}
+                      {ethParse(Number(transaction.value))}
                     </Text>
                   </Tooltip>
                 </Td>

@@ -7,7 +7,7 @@ import {
 } from "../../types/EthereumProvider/EthereumProvider";
 import { IProviderProps } from "../../types/Types";
 
-const DEFAULT_ETHEREUM_PROVIDER_VALUE: IEthereumProvider = {
+export const DEFAULT_ETHEREUM_PROVIDER_VALUE: IEthereumProvider = {
   providerState: null,
   removeProvider: () => {
     return;
@@ -22,11 +22,11 @@ const DEFAULT_ETHEREUM_PROVIDER_VALUE: IEthereumProvider = {
 };
 
 function forgetProvider() {
-  localStorage.removeItem(ethereumProviderKey);
+  sessionStorage.removeItem(ethereumProviderKey);
 }
 
 function saveProvider() {
-  localStorage.setItem(ethereumProviderKey, "provider_saved");
+  sessionStorage.setItem(ethereumProviderKey, "provider_saved");
 }
 
 export const EthereumContext = React.createContext<IEthereumProvider>(
@@ -58,27 +58,28 @@ export default function EthereumProvider({ children }: IProviderProps) {
   };
 
   React.useEffect(() => {
-    const provider = localStorage.getItem(ethereumProviderKey);
+    const provider = sessionStorage.getItem(ethereumProviderKey);
     if (provider) {
       detectProvider();
     }
   }, [detectProvider]);
 
-  const contextValue = React.useMemo(() => {
-    return {
+  const contextValue = React.useMemo(
+    () => ({
       providerState,
       removeProvider,
       detectProvider,
       forgetProvider,
       saveProvider,
-    };
-  }, [
-    providerState,
-    removeProvider,
-    detectProvider,
-    forgetProvider,
-    saveProvider,
-  ]);
+    }),
+    [
+      providerState,
+      removeProvider,
+      detectProvider,
+      forgetProvider,
+      saveProvider,
+    ]
+  );
 
   return (
     <EthereumContext.Provider value={contextValue}>

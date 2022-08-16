@@ -24,10 +24,10 @@ import useEthereumProvider from "../../../EthereumProvider/useEthereumProvider";
 import AlertDialogMetamask from "../../../Wallet/AlertDialogMetamask/AlertDialogMetamask";
 
 function ConnectWalletContent({
-  setIsConnectModalOpen,
-  setIsAccountModalOpen,
+  onOpenAccount,
+  onCloseConnect
 }: IConnectWalletContentProps): JSX.Element {
-  const { isPhoneHardware, connectWay } = useGlobalSettings();
+  const { isMobile, connectWay } = useGlobalSettings();
   const { providerState } = useEthereumProvider();
   const { connectMetamask } = useMetamask();
   const { account } = useAccount();
@@ -54,16 +54,16 @@ function ConnectWalletContent({
   };
 
   const onCLickBackIcon = () => {
-    setIsAccountModalOpen(true);
-    setIsConnectModalOpen(false);
+    onOpenAccount();
+    onCloseConnect();
   };
 
   const turnOffConnecting = () => {
     if (isConnecting === false) return;
 
     setIsConnecting(false);
-    setIsAccountModalOpen(true);
-    setIsConnectModalOpen(false);
+    onOpenAccount();
+    onCloseConnect();
   };
 
   React.useEffect(() => {
@@ -96,30 +96,27 @@ function ConnectWalletContent({
             aria-label={"back to account info"}
             icon={
               <ArrowBackIcon
-                boxSize={isPhoneHardware() ? "36px" : "24px"}
-                onClick={onCLickBackIcon}
+                boxSize={isMobile ? "36px" : "24px"}
               />
             }
+            onClick={onCLickBackIcon}
           />
         ) : (
           "Connect a wallet"
         )}
       </ModalHeader>
-      <ModalCloseButton boxSize={isPhoneHardware() ? "60px" : "40px"} />
+      <ModalCloseButton boxSize={isMobile ? "60px" : "40px"} />
       <ModalBody>
         {isConnecting ? (
           <Center flexDirection={"column"} gap={5}>
-            <Spinner size={isPhoneHardware() ? "xl" : "md"} />
+            <Spinner size={isMobile ? "xl" : "md"} />
             <Box textAlign={"center"} fontSize={"md"}>
               Connecting...
             </Box>
           </Center>
         ) : (
           <Flex direction={"column"}>
-            <Button
-              onClick={onMetamask}
-              h={isPhoneHardware() ? "87px" : "58px"}
-            >
+            <Button onClick={onMetamask} h={isMobile ? "87px" : "58px"}>
               <Flex
                 direction={"row"}
                 width={"100%"}
@@ -129,7 +126,7 @@ function ConnectWalletContent({
                 {connectWay.current === "metamask" ? (
                   <CheckCircleIcon
                     color={"green"}
-                    boxSize={isPhoneHardware() ? "12px" : "8px"}
+                    boxSize={isMobile ? "12px" : "8px"}
                   />
                 ) : (
                   <></>
@@ -138,7 +135,7 @@ function ConnectWalletContent({
                 <Text fontSize={"sm"}>MetaMask</Text>
                 <Spacer />
                 <Image
-                  boxSize={isPhoneHardware() ? "36px" : "24px"}
+                  boxSize={isMobile ? "36px" : "24px"}
                   src={
                     "https://app.uniswap.org/static/media/metamask.02e3ec27.png"
                   }
