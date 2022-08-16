@@ -9,7 +9,7 @@ const DEFAULT_NEW_BLOCK_INFO_VALUE: INewBlockInfo = {
   hashes: [],
 };
 
-function NewBlockEvent(): JSX.Element {
+function NewBlockEvent(): JSX.Element | null {
   const newBlockInfo = React.useRef<INewBlockInfo>(
     DEFAULT_NEW_BLOCK_INFO_VALUE
   );
@@ -74,7 +74,7 @@ function NewBlockEvent(): JSX.Element {
       });
   }, [account.account]);
 
-  return <></>;
+  return null;
 }
 
 export default React.memo(NewBlockEvent);
